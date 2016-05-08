@@ -1,0 +1,209 @@
+package taiji.org.donkeymgr.utils;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import taiji.org.donkeymgr.dao.Donkey;
+import taiji.org.donkeymgr.dao.DonkeyDao;
+
+/**
+ * Created by hose on 2016/4/3.
+ */
+public class FileUtils {
+
+    public static String getImageDirPath(Context context, int sn){
+        String path = context.getExternalFilesDir(null).getAbsolutePath() + "/" + sn + "/";
+        File file = new File(path);
+        if(!file.exists())
+            file.mkdir();
+
+        return path;
+    }
+
+    public static String getThumbImageDirPath(Context context, int sn){
+        String path = context.getExternalFilesDir(null).getAbsolutePath() + "/" + sn + "_thumb/";
+        File file = new File(path);
+        if(!file.exists())
+            file.mkdir();
+
+        return path;
+    }
+
+    public static String getImageName(String path){
+        int index = 1;
+        while (true){
+            File file = new File(path + index + ".jpg");
+            if ( !file.exists() ){
+                return file.getAbsolutePath();
+            }
+
+            index++;
+        }
+    }
+
+    public static void deleteDir(String dirName){
+        File dir = new File(dirName);
+        File[] files = dir.listFiles();
+        if(files != null && files.length != 0){
+            for(File file:files){
+                file.delete();
+            }
+        }
+
+        dir.delete();
+    }
+
+    public static void deleteDirBySn(Context context, int sn){
+        deleteDir(getImageDirPath(context, sn));
+        deleteDir(getThumbImageDirPath(context, sn));
+    }
+
+    public static void deleteDirById(Context context, DonkeyDao donkeyDao, Long id){
+        Donkey donkey = DaoUtils.getDeletedDonkeyByIdOnServer(donkeyDao, id);
+        deleteDirBySn(context, donkey.getSn());
+    }
+
+    public static boolean copyFile(String oldPath, String newPath) {
+        try {
+            int bytesum = 0;
+            int byteread = 0;
+            File oldfile = new File(oldPath);
+            if (oldfile.exists()) {
+                InputStream inStream = new FileInputStream(oldPath);
+                FileOutputStream fs = new FileOutputStream(newPath);
+                byte[] buffer = new byte[1444];
+                int length;
+                while ( (byteread = inStream.read(buffer)) != -1) {
+                    bytesum += byteread; //字节数 文件大小
+                    System.out.println(bytesum);
+                    fs.write(buffer, 0, byteread);
+                }
+                inStream.close();
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    private static Bitmap bitmap = null;
+
+    public static boolean makeThumbImage(String srcImageFile, String thumbImageFile){
+        File srcImage = new File(srcImageFile);
+
+        if(bitmap != null && !bitmap.isRecycled()) {
+            bitmap.recycle();
+            bitmap = null;
+            System.gc();
+        }
+
+        BitmapFactory.Options newOpts = new BitmapFactory.Options();
+        newOpts.inJustDecodeBounds = true;
+        bitmap = BitmapFactory.decodeFile(srcImageFile, newOpts);
+
+        newOpts.inJustDecodeBounds = false;
+        int width = newOpts.outWidth;
+        int height = newOpts.outHeight;
+
+        newOpts.inSampleSize = 1;
+        if(height >= width){
+            newOpts.inSampleSize = height / 150;
+        }else
+        {
+            newOpts.inSampleSize = width  / 150;
+        }
+
+        bitmap = BitmapFactory.decodeFile(srcImageFile, newOpts);
+
+        File thumbImage = new File(thumbImageFile);
+        FileOutputStream fOut = null;
+        try {
+            thumbImage.createNewFile();
+            fOut = new FileOutputStream(thumbImage);
+
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fOut);
+            fOut.flush();
+            fOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(bitmap != null && !bitmap.isRecycled()) {
+                bitmap.recycle();
+                bitmap = null;
+                System.gc();
+            }
+
+        }
+
+        //Bitmap thumb = Bitmap.createBitmap(bitmap, 0, 0, width1, height1);
+
+        return  true;
+    }
+
+    public static boolean makeThumbImages(String srcDir, String destDir){
+        File dir = new File(srcDir);
+        File[] images = dir.listFiles();
+        if(images == null || images.length == 0)
+            return true;
+
+        for (File image:images) {
+            if(bitmap != null && !bitmap.isRecycled()){
+                bitmap.recycle() ;
+                bitmap=null;
+                System.gc();
+            }
+
+            bitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+
+            double ratio = 1.0;
+            int height1 = 0;
+            int width1 = 0;
+            if(height >= width){
+                height1 = 150;
+                ratio = height * 1.0 / 150;
+                width1 = (int) (width * 1.0 / ratio);
+            }else
+            {
+                width1 = 150;
+                ratio = width * 1.0 / 150;
+                height1 = (int) (height * 1.0 / ratio);
+            }
+
+            File thumbImage = new File(destDir + image.getName());
+            FileOutputStream fOut = null;
+            try {
+                thumbImage.createNewFile();
+                fOut = new FileOutputStream(thumbImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+            try {
+                fOut.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                fOut.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //Bitmap thumb = Bitmap.createBitmap(bitmap, 0, 0, width1, height1);
+        }
+        return  true;
+    }
+}
