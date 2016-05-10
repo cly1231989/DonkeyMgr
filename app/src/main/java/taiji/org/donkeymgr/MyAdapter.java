@@ -1,7 +1,9 @@
 package taiji.org.donkeymgr;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -137,14 +139,30 @@ public class MyAdapter extends RecyclerView.Adapter {
             myHolder.deleteItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    selectedItemNum = Integer.parseInt(stringArrayList.get(position));
-                    Donkey donkey = DaoUtils.getDonkeyBySn(donkeyDao, selectedItemNum);
-                    donkey.setDeleteflag(true);
-                    donkeyDao.update(donkey);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("确认删除吗？");
+                    builder.setTitle("提示");
+                    builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            selectedItemNum = Integer.parseInt(stringArrayList.get(position));
+                            Donkey donkey = DaoUtils.getDonkeyBySn(donkeyDao, selectedItemNum);
+                            donkey.setDeleteflag(true);
+                            donkeyDao.update(donkey);
 
-                    stringArrayList.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, getItemCount());
+                            stringArrayList.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, getItemCount());
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.create().show();
                 }
             });
             myHolder.uploadImage.setOnClickListener(new View.OnClickListener() {
