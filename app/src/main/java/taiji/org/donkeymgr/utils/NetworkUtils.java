@@ -6,6 +6,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.zhy.http.okhttp.OkHttpUtils;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,12 +16,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import de.greenrobot.dao.query.DeleteQuery;
 import okhttp3.Response;
 import taiji.org.donkeymgr.GlobalData;
 import taiji.org.donkeymgr.bean.DonkeyVersion;
 import taiji.org.donkeymgr.bean.ImageItemInfo;
 import taiji.org.donkeymgr.dao.Donkey;
 import taiji.org.donkeymgr.dao.DonkeyDao;
+import taiji.org.donkeymgr.dao.UploadImageInfo;
+import taiji.org.donkeymgr.dao.UploadImageInfoDao;
+import taiji.org.donkeymgr.msgs.BeginSyncMessageEvent;
+import taiji.org.donkeymgr.msgs.EndSyncMessageEvent;
 
 /**
  * Created by cundong on 2015/10/9.
@@ -34,6 +41,7 @@ public class NetworkUtils {
     public static List<Long> deleteIdList = new ArrayList<>();
     public static List<Integer> newSnList = new ArrayList<>();
 
+    /*
     public static List<ImageItemInfo> uploadImages(Context context, Long idOnServer, int sn, boolean isMakeThumbImage){
         String uploadImageUrl = SettingUtils.makeServerAddress(context, "donkey/images/upload");
         Response response;
@@ -82,6 +90,47 @@ public class NetworkUtils {
             }
         }
         return itemsInfo;
+    }
+*/
+    public static void uploadImages(Context context, UploadImageInfoDao uploadImageInfoDao){
+        List<UploadImageInfo> uploadImages = uploadImageInfoDao.queryBuilder().list();
+        for (UploadImageInfo uploadImageInfo:uploadImages) {
+            EventBus.getDefault().post( new BeginSyncMessageEvent() );
+
+            Donkey donkey = DaoUtils.getDonkeyByID(DaoUtils.getDonkeyDao(), uploadImageInfo.getDonkeyid());
+            if (donkey.getVersion() == 1 && donkey.getSyncver() == 0)    //新记录还没有同步到服务器，服务器数据库对应的记录ID还未确定，图片不能上传
+                continue;
+
+            File image = new File( uploadImageInfo.getLocalimagepath() );
+            if(!image.exists()) {
+                uploadImageInfoDao.delete(uploadImageInfo);
+                continue;
+            }
+
+            Response response;
+            try {
+                response = OkHttpUtils
+                        .post()
+                        .addFile("image", "", image)
+                        .url( uploadImageInfo.getUrl() )
+                        .addParams( "donkeyid", Long.toString( uploadImageInfo.getIdonserver() ))
+                        .tag(context)
+                        .build()
+                        .execute();
+            }catch (IOException e){
+                break;
+            }
+
+            if ( !response.isSuccessful() ) {
+                break;
+            }
+            else {
+                uploadImageInfoDao.delete(uploadImageInfo);
+                image.delete();
+            }
+        }
+
+        EventBus.getDefault().post( new EndSyncMessageEvent() );
     }
 
     public static boolean downloadDonkeys(Context context, DonkeyDao donkeyDao){
@@ -139,28 +188,39 @@ public class NetworkUtils {
             }
 
             donkeyLocal.setSn(donkey.getSn());
-            donkeyLocal.setDeleteflag(false);
-            donkeyLocal.setSyncing(false);
-            donkeyLocal.setIdonserver(idOnServer);
-            donkeyLocal.setVersion(donkey.getVersion());
-            donkeyLocal.setSyncver(donkey.getVersion());
-            donkeyLocal.setAgewhendeal(donkey.getAgewhendeal());
-            donkeyLocal.setAgewhenkill(donkey.getAgewhenkill());
-            donkeyLocal.setBreed(donkey.getBreed());
-            donkeyLocal.setBreedaddress(donkey.getBreedaddress());
-            donkeyLocal.setBreedstatus(donkey.getBreedstatus());
-            donkeyLocal.setFactorytime(donkey.getFactorytime());
             donkeyLocal.setFarmer(donkey.getFarmer());
+            donkeyLocal.setBreedaddress(donkey.getBreedaddress());
+            donkeyLocal.setSupplier(donkey.getSupplier());
+            donkeyLocal.setSupplyaddress(donkey.getSupplyaddress());
+            donkeyLocal.setDealtime(donkey.getDealtime());
+            donkeyLocal.setSupplytime(donkey.getSupplytime());
+            donkeyLocal.setBreed(donkey.getBreed());
+            donkeyLocal.setSex(donkey.getSex());
+            donkeyLocal.setAgewhendeal(donkey.getAgewhendeal());
+            donkeyLocal.setAgewhenkill(donkey.getAgewhenkill().substring(0, donkey.getAgewhenkill().length()-1) );
+            donkeyLocal.setFeedpattern(donkey.getFeedpattern());
+            donkeyLocal.setForage(donkey.getForage());
             donkeyLocal.setFeedstatus(donkey.getFeedstatus());
             donkeyLocal.setHealthstatus(donkey.getHealthstatus());
+            donkeyLocal.setBreedstatus(donkey.getBreedstatus());
             donkeyLocal.setKilldepartment(donkey.getKilldepartment());
             donkeyLocal.setKillplace(donkey.getKillplace());
             donkeyLocal.setKilltime(donkey.getKilltime());
-            donkeyLocal.setProcessstatus(donkey.getProcessstatus());
-            donkeyLocal.setQualitystatyus(donkey.getQualitystatyus());
-            donkeyLocal.setSex(donkey.getSex());
+            donkeyLocal.setFreshkeepmethod(donkey.getFreshkeepmethod());
+            donkeyLocal.setFreshkeeptime(donkey.getFreshkeeptime());
             donkeyLocal.setSplitstatus(donkey.getSplitstatus());
-            donkeyLocal.setDealtime(donkey.getDealtime());
+            donkeyLocal.setProcessstatus(donkey.getProcessstatus());
+            donkeyLocal.setQualitystatus(donkey.getQualitystatus());
+            donkeyLocal.setQC(donkey.getQC());
+            donkeyLocal.setQA(donkey.getQA());
+            donkeyLocal.setFurquality(donkey.getFurquality());
+            donkeyLocal.setReserved(donkey.getReserved());
+            donkeyLocal.setFactorytime(donkey.getFactorytime());
+            donkeyLocal.setVersion(donkey.getVersion());
+            donkeyLocal.setDeleteflag(false);
+            donkeyLocal.setSyncing(false);
+            donkeyLocal.setIdonserver(idOnServer);
+            donkeyLocal.setSyncver(donkey.getVersion());
 
             if (isNew) {
                 donkeyDao.insert(donkeyLocal);
@@ -172,6 +232,12 @@ public class NetworkUtils {
         }
 
         return true;
+    }
+
+    private static void addStringToMap(String key, String value, Map map){
+        if (value != null){
+            map.put(key, value);
+        }
     }
 
     public static Map<String, String> makeParas(DonkeyDao donkeyDao, String oper, Long id){
@@ -190,27 +256,38 @@ public class NetworkUtils {
 
             //Map<String, String> paras = (Map<String, String>)JSON.parse( JSON.toJSONString(donkey) );
             Map<String, String> paras = new HashMap<>();
-            paras.put("sn",             Integer.toString(donkey.getSn()));
-            paras.put("agewhendeal",    donkey.getAgewhendeal());
-            paras.put("agewhenkill",    donkey.getAgewhenkill());
-            paras.put("breed",          donkey.getBreed());
-            paras.put("breedaddress",   donkey.getBreedaddress());
-            paras.put("breedstatus",    donkey.getBreedstatus());
-            paras.put("dealtime",       donkey.getDealtime());
-            paras.put("factorytime",    donkey.getFactorytime());
-            paras.put("farmer",         donkey.getFarmer());
-            paras.put("feedstatus",     donkey.getFeedstatus());
-            paras.put("healthstatus",   donkey.getHealthstatus());
-            paras.put("killdepartment", donkey.getKilldepartment());
-            paras.put("killplace",      donkey.getKillplace());
-            paras.put("killtime",       donkey.getKilltime());
-            paras.put("processstatus",  donkey.getProcessstatus());
-            paras.put("qualitystatyus", donkey.getQualitystatyus());
-            paras.put("sex",            donkey.getSex());
-            paras.put("splitstatus",    donkey.getSplitstatus());
-            paras.put("version",        Long.toString(donkey.getVersion()));
-            paras.put("id",             Long.toString(id));
-            paras.put("oper",           oper);
+            addStringToMap("oper", oper, paras);
+            addStringToMap("id", Long.toString(id), paras);
+            addStringToMap("sn", Integer.toString(donkey.getSn()), paras);
+            addStringToMap("farmer", donkey.getFarmer(), paras);
+            addStringToMap("breedaddress",   donkey.getBreedaddress(), paras);
+            addStringToMap("supplier",       donkey.getSupplier(), paras);
+            addStringToMap("supplyaddress", donkey.getSupplyaddress(), paras);
+            addStringToMap("dealtime",       donkey.getDealtime(), paras);
+            addStringToMap("supplytime",     donkey.getSupplytime(), paras);
+            addStringToMap("breed",          donkey.getBreed(), paras);
+            addStringToMap("sex",            donkey.getSex(), paras);
+            addStringToMap("agewhendeal",    donkey.getAgewhendeal(), paras);
+            addStringToMap("agewhenkill",    donkey.getAgewhenkill()+"岁", paras);
+            addStringToMap("feedpattern",    donkey.getFeedpattern(), paras);
+            addStringToMap("forage",          donkey.getForage(), paras);
+            addStringToMap("feedstatus",     donkey.getFeedstatus(), paras);
+            addStringToMap("healthstatus",   donkey.getHealthstatus(), paras);
+            addStringToMap("breedstatus",    donkey.getBreedstatus(), paras);
+            addStringToMap("killdepartment", donkey.getKilldepartment(), paras);
+            addStringToMap("killplace",      donkey.getKillplace(), paras);
+            addStringToMap("killtime",       donkey.getKilltime(), paras);
+            addStringToMap("freshkeepmethod", donkey.getFreshkeepmethod(), paras);
+            addStringToMap("freshkeeptime",      donkey.getFreshkeeptime(), paras);
+            addStringToMap("splitstatus",        donkey.getSplitstatus(), paras);
+            addStringToMap("processstatus",      donkey.getProcessstatus(), paras);
+            addStringToMap("qualitystatus",     donkey.getQualitystatus(), paras);
+            addStringToMap("qc",                   donkey.getQC(), paras);
+            addStringToMap("qa",                   donkey.getQA(), paras);
+            addStringToMap("furquality",          donkey.getFurquality(), paras);
+            addStringToMap("reserved",            donkey.getReserved(), paras);
+            addStringToMap("factorytime",         donkey.getFactorytime(), paras);
+            addStringToMap("version",              Long.toString(donkey.getVersion()), paras);
 
             return paras;
         }
@@ -257,10 +334,7 @@ public class NetworkUtils {
             if( 0 == result )
                 return false;
 
-            Donkey donkey = DaoUtils.getDonkeyByIdOnServer(donkeyDao, id);
-            if( null == NetworkUtils.uploadImages(context, id, donkey.getSn(), false) )
-                return false;
-
+             Donkey donkey = DaoUtils.getDonkeyByIdOnServer(donkeyDao, id);
             donkey.setSyncver(donkey.getVersion());
             donkeyDao.update(donkey);
             HandlerUtils.updateUI();
@@ -276,9 +350,6 @@ public class NetworkUtils {
                 return false;
 
             Donkey donkey = DaoUtils.getDonkeyBySn(donkeyDao, sn);
-            if( null == NetworkUtils.uploadImages(context, result, sn, false) )
-                return false;
-
             donkey.setSyncver(donkey.getVersion());
             donkey.setIdonserver(result);
             donkeyDao.update(donkey);
@@ -292,11 +363,14 @@ public class NetworkUtils {
     public static boolean deleteDonkeys(Context context, DonkeyDao donkeyDao){
         for (Long id:deleteIdList){
 
-            FileUtils.deleteDirById(context, donkeyDao, id);
+            Donkey donkey = DaoUtils.getDeletedDonkeyByIdOnServer(donkeyDao, id);
+            FileUtils.deleteDirBySn(context, donkey.getSn());
+            DaoUtils.deleteUploadImageInfo(context.getApplicationContext(), donkey.getId());
+
             if( 0 == uploadDonkeys(context, donkeyDao, "del", id) )
                 return false;
 
-            donkeyDao.delete( DaoUtils.getDeletedDonkeyByIdOnServer(donkeyDao, id) );
+            donkeyDao.delete( donkey );
         }
 
         return true;

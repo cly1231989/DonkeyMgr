@@ -34,20 +34,34 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 import okhttp3.Call;
 import taiji.org.donkeymgr.bean.OperaResult;
 import taiji.org.donkeymgr.bean.UserInfo;
 import taiji.org.donkeymgr.dao.Donkey;
 import taiji.org.donkeymgr.dao.DonkeyDao;
+import taiji.org.donkeymgr.dao.UploadImageInfoDao;
+import taiji.org.donkeymgr.msgs.BeginSyncMessageEvent;
+import taiji.org.donkeymgr.msgs.EndSyncMessageEvent;
+import taiji.org.donkeymgr.msgs.LoginResultMsgEvent;
+import taiji.org.donkeymgr.msgs.LogoutMsgEvent;
+import taiji.org.donkeymgr.msgs.QRCodeScanResult;
 import taiji.org.donkeymgr.utils.DaoUtils;
 import taiji.org.donkeymgr.utils.HandlerUtils;
 import taiji.org.donkeymgr.utils.NetworkUtils;
 import taiji.org.donkeymgr.utils.SettingUtils;
+import taiji.org.donkeymgr.utils.UploadImageThread;
 
 public class MainActivity extends AppCompatActivity {
 
     private int lastIndex = -1;
-    private int searchNum = -1;
+    //private int searchNum = -1;
     private boolean isSync = false;
     private boolean isExit = false;
     private Object lock = new Object();
@@ -64,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Animation animation;
     private ProgressDialog p_dialog;
-    private Thread syncThread;
+    private SyncThread syncThread;
+    //private UploadImageThread uploadImageThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +88,19 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         //toolbar.setLogo(R.drawable.ic_launcher);
         toolbar.setTitle("");
+        UploadImageThread.init(this);
+        DaoUtils.init(this);
 
+        EventBus.getDefault().register(this);
         login();
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!SettingUtils.isOnline())
-                    startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), 0);
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 else
-                    startActivityForResult(new Intent(MainActivity.this, ModifyPwdActivity.class), 1);
+                    startActivity(new Intent(MainActivity.this, ModifyPwdActivity.class));
             }
         });
 
@@ -100,10 +118,7 @@ public class MainActivity extends AppCompatActivity {
         scanQRFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, QRCodeScanActivity.class);
-                startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
-
+                startActivity(new Intent(MainActivity.this, QRCodeScanActivity.class));
             }
         });
 
@@ -117,13 +132,25 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mHeaderAndFooterRecyclerViewAdapter);
 
         Header header = new Header(this);
-        final ClearEditText clearEditText = (ClearEditText)header.findViewById(R.id.searchEditText);
-        clearEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        final ClearEditText searchEditText = (ClearEditText)header.findViewById(R.id.searchEditText);
+        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((actionId == EditorInfo.IME_ACTION_SEARCH) || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    searchNum = Integer.parseInt(clearEditText.getText().toString());
-                    MainActivity.this.mDataAdapter.search(searchNum);
+                    if(searchEditText.getText().toString().isEmpty()){
+                        Message msg = new Message();
+                        msg.what = MainActivity.AddItemHandler.MSG_ADD_CLAER_SEARCH;
+                        HandlerUtils.getAddItemHandler().sendMessage(msg);
+                        return true;
+                    }
+
+                    if( HandlerUtils.isNumeric(searchEditText.getText().toString()) ) {
+                        int searchNum = Integer.parseInt(searchEditText.getText().toString());
+                        MainActivity.this.mDataAdapter.search(searchNum);
+                    }else{
+                        String farmer = searchEditText.getText().toString();
+                        MainActivity.this.mDataAdapter.search(farmer);
+                    }
                     return true;
                 }
 
@@ -140,7 +167,9 @@ public class MainActivity extends AppCompatActivity {
         sycimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                synchronized (lock){lock.notify();}
+                //synchronized (lock){lock.notify();}
+                syncThread.startSync();
+                UploadImageThread.getInstance().startSync();
             }
         });
 
@@ -152,7 +181,16 @@ public class MainActivity extends AppCompatActivity {
 
         syncThread = new SyncThread();
         syncThread.start();
-        //donkeyDao = GlobalData.getDonkeyDao(MainActivity.this);
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (SettingUtils.canAutoSync(MainActivity.this)) {
+                    MainActivity.this.syncThread.startSync();
+                    UploadImageThread.getInstance().startSync();
+                };
+            }
+        }, 5000, 30 * 1000) ;
     }
 
     private void startAnimation(){
@@ -177,45 +215,6 @@ public class MainActivity extends AppCompatActivity {
         config.writeDebugLogs(); // Remove for release app
 
         ImageLoader.getInstance().init(config.build());
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case 0:
-                if(resultCode == RESULT_OK) {
-                    int result = data.getIntExtra("result", 0);
-                    if (result == 1) {
-                        toolbar.setNavigationIcon(R.drawable.head_image_login);
-                    } else {
-                        toolbar.setNavigationIcon(R.drawable.head_image_unlogin);
-                    }
-                }
-                break;
-            case 1:
-                if (resultCode == RESULT_OK) {
-                    int result = data.getIntExtra("result", 0);
-                    if (result == 1) {
-                        toolbar.setNavigationIcon(R.drawable.head_image_unlogin);
-                    }
-                }
-                break;
-            case SCANNIN_GREQUEST_CODE:
-                if(resultCode == RESULT_OK){
-                    String QRCode = data.getStringExtra("QRCode");
-                    Integer sn = Integer.parseInt(QRCode.substring(QRCode.lastIndexOf("/") + 1));
-                    DonkeyDao donkeyDao = DaoUtils.getDonkeyDao(MainActivity.this);
-                    Donkey donkey = DaoUtils.getDonkeyBySn(donkeyDao, sn);
-                    Intent intent = new Intent(MainActivity.this, EditActivity.class);
-                    if (donkey == null){
-                        intent.putExtra("isAdd", true);
-                    }else{
-                        intent.putExtra("num", sn);
-                    }
-
-                    startActivity(intent);
-                }
-                break;
-        }
     }
 
     void login() {
@@ -251,14 +250,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(String response) {
                     p_dialog.cancel();
                     OperaResult operaResult = JSON.parseObject(response, OperaResult.class);
-                    if (!operaResult.isSuccess()) {
-                        SettingUtils.setIsOnline(false);
-                        toolbar.setNavigationIcon(R.drawable.head_image_unlogin);
-                    } else {
-                        SettingUtils.setIsOnline(true);
-                        toolbar.setNavigationIcon(R.drawable.head_image_login);
-                        Toast.makeText(MainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                    }
+                    EventBus.getDefault().post( new LoginResultMsgEvent(operaResult.isSuccess()) );
                 }
             });
     }
@@ -288,8 +280,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addItem(int num) {
-        if (mDataAdapter.getItemCount() < GlobalData.COUNT_PER_PAGE)
+        if (mDataAdapter.getItemCount() < GlobalData.COUNT_PER_PAGE) {
             mDataAdapter.addItem(Integer.toString(num));
+            lastIndex++;
+        }
     }
 
     private EndlessRecyclerOnScrollListener mOnScrollListener = new EndlessRecyclerOnScrollListener() {
@@ -324,6 +318,48 @@ public class MainActivity extends AppCompatActivity {
             //requestData();
         }
     };
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onBeginSyncMessageEvent(BeginSyncMessageEvent event){
+        startAnimation();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEndSyncMessageEvent(EndSyncMessageEvent event){
+        stopAnimation();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLoginResultMsgEvent(LoginResultMsgEvent event){
+        if( !event.isSuccess() ){
+            SettingUtils.setIsOnline(false);
+            toolbar.setNavigationIcon(R.drawable.head_image_unlogin);
+        } else {
+            SettingUtils.setIsOnline(true);
+            toolbar.setNavigationIcon(R.drawable.head_image_login);
+            Toast.makeText(MainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+            UploadImageThread.getInstance().start();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLogoutMsgEvent(LogoutMsgEvent event) {
+        toolbar.setNavigationIcon(R.drawable.head_image_unlogin);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onQRCodeScanResult(QRCodeScanResult event) {
+        int sn = event.getSn();
+        DonkeyDao donkeyDao = DaoUtils.getDonkeyDao();
+        Donkey donkey = DaoUtils.getDonkeyBySn(donkeyDao, sn);
+        Intent intent = new Intent(MainActivity.this, EditActivity.class);
+        if (donkey == null) {
+            intent.putExtra("isAdd", true);
+        }
+
+        intent.putExtra("num", Integer.toString(sn));
+        startActivity(intent);
+    }
 
     public class AddItemHandler extends Handler {
         public final static int MSG_ADD_ITEM = 1;
@@ -379,7 +415,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void clear(){
-        searchNum = -1;
+        //searchNum = -1;
         lastIndex = -1;
         MainActivity.this.mDataAdapter.clear();
     }
@@ -390,44 +426,39 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         isExit = true;
         OkHttpUtils.getInstance().cancelTag(this);//取消以Activity.this作为tag的请求
+        EventBus.getDefault().unregister(this);
     }
 
     public class SyncThread extends Thread {
+        public Handler downloadHandler = null;
 
+        public void startSync(){
+            if (downloadHandler != null)
+                downloadHandler.sendEmptyMessage(0);
+        }
         @Override
         public void run() {
-            while(!isExit){
-                try {
-                    if (SettingUtils.canAutoSync(MainActivity.this)) {
-                        AddItemHandler addHandler = HandlerUtils.getAddItemHandler();
-                        Message startMsg = new Message();
-                        startMsg.what = AddItemHandler.MSG_START_SYNC;
-                        addHandler.sendMessage(startMsg);
+            Looper.prepare();
 
-                        DonkeyDao donkeyDao = DaoUtils.getDonkeyDao(MainActivity.this);
+            downloadHandler = new Handler(){
+                @Override
+                public void handleMessage(Message msg) {
 
-                        if (NetworkUtils.downloadIdList(MainActivity.this, donkeyDao)) {
-                            if (NetworkUtils.downloadDonkeys(MainActivity.this, donkeyDao)) {
-                                if(SettingUtils.isOnline())
-                                    NetworkUtils.uploadDonkeys(MainActivity.this, donkeyDao);
-                            }
+                    EventBus.getDefault().post( new BeginSyncMessageEvent() );
+                    DonkeyDao donkeyDao = DaoUtils.getDonkeyDao();
+
+                    if (NetworkUtils.downloadIdList(MainActivity.this, donkeyDao)) {
+                        if (NetworkUtils.downloadDonkeys(MainActivity.this, donkeyDao)) {
+                            if(SettingUtils.isOnline())
+                                NetworkUtils.uploadDonkeys(MainActivity.this, donkeyDao);
                         }
-
-                        Message stopMsg = new Message();
-                        stopMsg.what = AddItemHandler.MSG_STOP_SYNC;
-                        addHandler.sendMessage(stopMsg);
                     }
 
-                    if (isExit)
-                        break;
-
-                    synchronized (lock) {lock.wait(30 * 1000);}
-                }catch (InterruptedException e){
-
+                    EventBus.getDefault().post( new EndSyncMessageEvent() );
                 }
+            };
 
-            }
-
+            Looper.loop();
         }
     }
 }

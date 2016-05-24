@@ -11,7 +11,7 @@ import taiji.org.donkeymgr.bean.ImageItemInfo;
  */
 public class GlobalData {
 
-    public static final int COUNT_PER_PAGE = 15;
+    public static final int COUNT_PER_PAGE = 100;
     public static List<Integer> deletedOnServerSnList;
 
     public static List<PhotoInfo> getResultList() {

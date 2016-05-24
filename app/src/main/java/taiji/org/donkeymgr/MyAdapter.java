@@ -39,7 +39,7 @@ public class MyAdapter extends RecyclerView.Adapter {
     public MyAdapter(Context context) {
         this.context = context;
         stringArrayList = new ArrayList<>();
-        donkeyDao = DaoUtils.getDonkeyDao(context);
+        donkeyDao = DaoUtils.getDonkeyDao();
 
         //getDatas(0, GlobalData.COUNT_PER_PAGE);
     }
@@ -149,6 +149,7 @@ public class MyAdapter extends RecyclerView.Adapter {
                             Donkey donkey = DaoUtils.getDonkeyBySn(donkeyDao, selectedItemNum);
                             donkey.setDeleteflag(true);
                             donkeyDao.update(donkey);
+                            DaoUtils.deleteUploadImageInfo(context.getApplicationContext(), donkey.getId());
 
                             stringArrayList.remove(position);
                             notifyItemRemoved(position);
@@ -193,15 +194,14 @@ public class MyAdapter extends RecyclerView.Adapter {
         public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
             if (resultList != null) {
                 String path = FileUtils.getImageDirPath(context, selectedItemNum);
-
-                for (PhotoInfo photo: resultList) {
-                    String imagePath = FileUtils.getImageName(path);
-                    FileUtils.copyFile(photo.getPhotoPath(), imagePath);
-                }
-
                 Donkey donkey = DaoUtils.getDonkeyBySn(donkeyDao, selectedItemNum);
-                donkey.setVersion(donkey.getVersion() + 1);
-                donkeyDao.update(donkey);
+                FileUtils.makeUploadImageInfos(context, resultList, path, donkey);
+//                    String imagePath = FileUtils.getImageName(path);
+//                    FileUtils.copyFile(photo.getPhotoPath(), imagePath);
+
+//                Donkey donkey = DaoUtils.getDonkeyBySn(donkeyDao, selectedItemNum);
+//                donkey.setVersion(donkey.getVersion() + 1);
+//                donkeyDao.update(donkey);
             }
         }
 
@@ -249,6 +249,16 @@ public class MyAdapter extends RecyclerView.Adapter {
         Donkey donkey = DaoUtils.getDonkeyBySn(donkeyDao, searchNum);
         if (donkey != null )
             stringArrayList.add(Integer.toString(donkey.getSn()));
+
+        notifyDataSetChanged();
+    }
+
+    public void search(String farmer){
+        stringArrayList.clear();
+        List<Donkey>  donkeys = DaoUtils.getDonkeyByFarmer(donkeyDao, farmer);
+        for (Donkey donkey:donkeys) {
+            stringArrayList.add(Integer.toString(donkey.getSn()));
+        }
 
         notifyDataSetChanged();
     }

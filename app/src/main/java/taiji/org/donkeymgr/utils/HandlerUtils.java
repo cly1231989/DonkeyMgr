@@ -44,16 +44,16 @@ public class HandlerUtils {
     }
 
     private static MainActivity.AddItemHandler addItemHandler = null;
-
-    public static EditImagesActivity.UploadImagesHandler getUploadImagesHandler() {
-        return uploadImagesHandler;
-    }
-
-    public static void setUploadImagesHandler(EditImagesActivity.UploadImagesHandler uploadImagesHandler) {
-        HandlerUtils.uploadImagesHandler = uploadImagesHandler;
-    }
-
-    private static EditImagesActivity.UploadImagesHandler uploadImagesHandler = null;
+//
+//    public static EditImagesActivity.UploadImagesHandler getUploadImagesHandler() {
+//        return uploadImagesHandler;
+//    }
+//
+//    public static void setUploadImagesHandler(EditImagesActivity.UploadImagesHandler uploadImagesHandler) {
+//        HandlerUtils.uploadImagesHandler = uploadImagesHandler;
+//    }
+//
+//    private static EditImagesActivity.UploadImagesHandler uploadImagesHandler = null;
 
     public static List<ImageItemInfo> getItemsInfo() {
         return itemsInfo;
@@ -64,12 +64,21 @@ public class HandlerUtils {
     }
 
     private static List<ImageItemInfo> itemsInfo;
+//
+//    public static void notifyImageUploadFinished(List<ImageItemInfo> itemsInfo){
+//        HandlerUtils.itemsInfo = itemsInfo;
+//
+//        Message msg = new Message();
+//        msg.what = EditImagesActivity.UploadImagesHandler.MSG_UPDATE_UI;
+//        uploadImagesHandler.sendMessage(msg);
+//    }
 
-    public static void notifyImageUploadFinished(List<ImageItemInfo> itemsInfo){
-        HandlerUtils.itemsInfo = itemsInfo;
-
-        Message msg = new Message();
-        msg.what = EditImagesActivity.UploadImagesHandler.MSG_UPDATE_UI;
-        uploadImagesHandler.sendMessage(msg);
+    public static boolean isNumeric(String str){
+        for (int i = 0; i < str.length(); i++){
+            if (!Character.isDigit(str.charAt(i))){
+                return false;
+            }
+        }
+        return true;
     }
 }

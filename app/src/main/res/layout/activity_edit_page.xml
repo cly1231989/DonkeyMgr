@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="编        号"
+        android:text="编          号"
         android:id="@+id/textView3"
         android:layout_gravity="right"
         android:layout_alignParentTop="true"
@@ -53,10 +53,40 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="供应商"
+        android:id="@+id/textView122"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/textView22"
+        android:layout_alignRight="@+id/textView21"
+        android:layout_alignEnd="@+id/textView21" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="供应地址"
+        android:id="@+id/textView123"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/textView122"
+        android:layout_alignRight="@+id/textView21"
+        android:layout_alignEnd="@+id/textView21" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="供应时间"
+        android:id="@+id/textView124"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/textView123"
+        android:layout_alignRight="@+id/textView21"
+        android:layout_alignEnd="@+id/textView21" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="品        种"
         android:id="@+id/textView23"
         android:layout_marginTop="40dp"
-        android:layout_below="@+id/textView22"
+        android:layout_below="@+id/textView124"
         android:layout_alignRight="@+id/textView22"
         android:layout_alignEnd="@+id/textView22" />
 
@@ -70,7 +100,7 @@
         android:layout_alignRight="@+id/textView23"
         android:layout_alignEnd="@+id/textView23" />
 
-    <TextView
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="订单年龄"
@@ -79,18 +109,18 @@
         android:layout_below="@+id/textView24"
         android:layout_alignRight="@+id/textView24"
         android:layout_alignEnd="@+id/textView24" />
-
+    -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="屠宰年龄"
         android:id="@+id/textView26"
         android:layout_marginTop="40dp"
-        android:layout_below="@+id/textView25"
-        android:layout_alignRight="@+id/textView25"
-        android:layout_alignEnd="@+id/textView25" />
+        android:layout_below="@+id/textView24"
+        android:layout_alignRight="@+id/textView23"
+        android:layout_alignEnd="@+id/textView23" />
 
-    <TextView
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="饲喂情况"
@@ -99,129 +129,37 @@
         android:layout_below="@+id/textView26"
         android:layout_alignRight="@+id/textView26"
         android:layout_alignEnd="@+id/textView26" />
+    -->
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="健康情况"
+        android:text="饲养方式"
+        android:id="@+id/textView127"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/textView26"
+        android:layout_alignRight="@+id/textView26"
+        android:layout_alignEnd="@+id/textView26" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="饲草"
+        android:id="@+id/textView128"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/textView127"
+        android:layout_alignRight="@+id/textView26"
+        android:layout_alignEnd="@+id/textView26" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="健康状况"
         android:id="@+id/textView28"
         android:layout_marginTop="40dp"
-        android:layout_below="@+id/textView27"
-        android:layout_alignRight="@+id/textView27"
-        android:layout_alignEnd="@+id/textView27" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/snEditText"
-        android:layout_alignBaseline="@+id/textView3"
-        android:layout_toRightOf="@+id/textView3"
-        android:inputType="numberDecimal"
-        android:layout_marginLeft="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/farmerEditText"
-        android:layout_alignBaseline="@+id/textView30"
-        android:layout_alignRight="@+id/snEditText"
-        android:layout_alignEnd="@+id/snEditText"
-        android:layout_alignLeft="@+id/snEditText"
-        android:layout_alignStart="@+id/snEditText" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/breedDddressEditText"
-        android:layout_alignBaseline="@+id/textView21"
-        android:layout_toRightOf="@+id/textView21"
-        android:layout_alignLeft="@+id/snEditText"
-        android:layout_alignStart="@+id/snEditText"
-        android:layout_alignRight="@+id/snEditText"
-        android:layout_alignEnd="@+id/snEditText" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/feedEditText"
-        android:layout_alignBaseline="@+id/textView27"
-        android:layout_toRightOf="@+id/textView27"
-        android:layout_alignLeft="@+id/snEditText"
-        android:layout_alignStart="@+id/snEditText"
-        android:layout_alignRight="@+id/breedDddressEditText"
-        android:layout_alignEnd="@+id/breedDddressEditText" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/healthEditText"
-        android:layout_alignBaseline="@+id/textView28"
-        android:layout_alignLeft="@+id/snEditText"
-        android:layout_alignStart="@+id/snEditText"
-        android:layout_toRightOf="@+id/textView28"
-        android:layout_alignRight="@+id/feedEditText"
-        android:layout_alignEnd="@+id/feedEditText" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ageWhenKillEditText"
-        android:layout_alignBaseline="@+id/textView26"
-        android:layout_alignLeft="@+id/snEditText"
-        android:layout_alignStart="@+id/snEditText"
-        android:layout_toRightOf="@+id/textView26"
-        android:layout_alignRight="@+id/feedEditText"
-        android:layout_alignEnd="@+id/feedEditText" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="none"
-        android:ems="10"
-        android:id="@+id/dealTimeEditText"
-        android:layout_alignBaseline="@+id/textView22"
-        android:layout_toRightOf="@+id/textView22"
-        android:layout_alignLeft="@+id/snEditText"
-        android:layout_alignStart="@+id/snEditText"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:editable="false"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ageWhenDealEditText"
-        android:layout_alignBaseline="@+id/textView25"
-        android:layout_alignLeft="@+id/snEditText"
-        android:layout_alignStart="@+id/snEditText"
-        android:layout_toRightOf="@+id/textView25"
-        android:layout_alignRight="@+id/breedEditText"
-        android:layout_alignEnd="@+id/breedEditText" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/breedEditText"
-        android:layout_alignBaseline="@+id/textView23"
-        android:layout_alignLeft="@+id/snEditText"
-        android:layout_alignStart="@+id/snEditText"
-        android:layout_toRightOf="@+id/textView23"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/sexSpinner"
-        android:entries="@array/donkey_sex"
-        android:layout_alignBaseline="@+id/textView24"
-        android:layout_alignLeft="@+id/snEditText"
-        android:layout_alignStart="@+id/snEditText"
-        android:layout_toRightOf="@+id/textView24"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/textView128"
+        android:layout_alignRight="@+id/textView23"
+        android:layout_alignEnd="@+id/textView23" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -244,7 +182,7 @@
         android:layout_alignRight="@+id/textView14"
         android:layout_alignEnd="@+id/textView14" />
 
-    <TextView
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="屠宰地点"
@@ -254,6 +192,7 @@
         android:layout_below="@+id/textView29"
         android:layout_alignRight="@+id/textView29"
         android:layout_alignEnd="@+id/textView29" />
+        -->
 
     <TextView
         android:layout_width="wrap_content"
@@ -262,11 +201,11 @@
         android:id="@+id/textView15"
         android:layout_gravity="right"
         android:layout_marginTop="40dp"
-        android:layout_below="@+id/textView13"
-        android:layout_alignRight="@+id/textView13"
-        android:layout_alignEnd="@+id/textView13" />
+        android:layout_below="@+id/textView29"
+        android:layout_alignRight="@+id/textView29"
+        android:layout_alignEnd="@+id/textView29" />
 
-    <TextView
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="分割情况"
@@ -287,6 +226,29 @@
         android:layout_below="@+id/textView16"
         android:layout_alignRight="@+id/textView16"
         android:layout_alignEnd="@+id/textView16" />
+        -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="保鲜方式"
+        android:id="@+id/textView129"
+        android:layout_gravity="right"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/textView15"
+        android:layout_alignRight="@+id/textView29"
+        android:layout_alignEnd="@+id/textView29" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="保质期"
+        android:id="@+id/textView130"
+        android:layout_gravity="right"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/textView129"
+        android:layout_alignRight="@+id/textView29"
+        android:layout_alignEnd="@+id/textView29" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -295,11 +257,55 @@
         android:id="@+id/textView18"
         android:layout_gravity="right"
         android:layout_marginTop="40dp"
-        android:layout_below="@+id/textView17"
+        android:layout_below="@+id/textView130"
         android:layout_alignRight="@+id/textView17"
         android:layout_alignEnd="@+id/textView17" />
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="QC编号"
+        android:id="@+id/textView131"
+        android:layout_gravity="right"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/textView18"
+        android:layout_alignRight="@+id/textView17"
+        android:layout_alignEnd="@+id/textView17" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="QA编号"
+        android:id="@+id/textView132"
+        android:layout_gravity="right"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/textView131"
+        android:layout_alignRight="@+id/textView17"
+        android:layout_alignEnd="@+id/textView17" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="驴皮质量"
+        android:id="@+id/textView133"
+        android:layout_gravity="right"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/textView132"
+        android:layout_alignRight="@+id/textView17"
+        android:layout_alignEnd="@+id/textView17" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="其他"
+        android:id="@+id/textView134"
+        android:layout_gravity="right"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/textView133"
+        android:layout_alignRight="@+id/textView17"
+        android:layout_alignEnd="@+id/textView17" />
+
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="出厂时间"
@@ -309,7 +315,194 @@
         android:layout_below="@+id/textView18"
         android:layout_alignRight="@+id/textView18"
         android:layout_alignEnd="@+id/textView18" />
+        -->
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/snEditText"
+        android:layout_alignBaseline="@+id/textView3"
+        android:layout_toRightOf="@+id/textView3"
+        android:inputType="numberDecimal"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/farmerEditText"
+        android:layout_alignBaseline="@+id/textView30"
+        android:layout_alignRight="@+id/snEditText"
+        android:layout_alignEnd="@+id/snEditText"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/breedAddressEditText"
+        android:layout_alignBaseline="@+id/textView21"
+        android:layout_toRightOf="@+id/textView21"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_alignRight="@+id/snEditText"
+        android:layout_alignEnd="@+id/snEditText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        android:ems="10"
+        android:id="@+id/dealTimeEditText"
+        android:layout_alignBaseline="@+id/textView22"
+        android:layout_toRightOf="@+id/textView22"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:editable="false"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/supplierEditText"
+        android:layout_alignBaseline="@+id/textView122"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_toRightOf="@+id/textView23"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/supplyAddressEditText"
+        android:layout_alignBaseline="@+id/textView123"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_toRightOf="@+id/textView23"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        android:ems="10"
+        android:id="@+id/supplyTimeEditText"
+        android:layout_alignBaseline="@+id/textView124"
+        android:layout_toRightOf="@+id/textView22"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:editable="false"/>
+
+    <!--<EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/feedEditText"
+        android:layout_alignBaseline="@+id/textView27"
+        android:layout_toRightOf="@+id/textView27"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_alignRight="@+id/breedDddressEditText"
+        android:layout_alignEnd="@+id/breedDddressEditText" />
+        -->
+
+    <!--<EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ageWhenDealEditText"
+        android:layout_alignBaseline="@+id/textView25"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_toRightOf="@+id/textView25"
+        android:layout_alignRight="@+id/breedEditText"
+        android:layout_alignEnd="@+id/breedEditText" />
+        -->
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/breedSpinner"
+        android:entries="@array/breed"
+        android:layout_alignBaseline="@+id/textView23"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_toRightOf="@+id/textView23"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sexSpinner"
+        android:entries="@array/donkey_sex"
+        android:layout_alignBaseline="@+id/textView24"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_toRightOf="@+id/textView24"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ageWhenKillSpinner"
+        android:entries="@array/age"
+        android:layout_alignBaseline="@+id/textView26"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_toRightOf="@+id/textView26"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_36"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="岁"
+        android:id="@+id/textView140"
+        android:layout_gravity="right"
+        android:layout_alignBottom="@+id/textView26"
+        android:layout_alignParentRight="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/feedPatternSpinner"
+        android:entries="@array/feedpattern"
+        android:layout_alignBaseline="@+id/textView127"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_toRightOf="@+id/textView127"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/forageEditText"
+        android:layout_alignBaseline="@+id/textView128"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_toRightOf="@+id/textView128"
+        android:layout_alignRight="@+id/snEditText"
+        android:layout_alignEnd="@+id/snEditText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/healthEditText"
+        android:layout_alignBaseline="@+id/textView28"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_toRightOf="@+id/textView28"
+        android:layout_alignRight="@+id/snEditText"
+        android:layout_alignEnd="@+id/snEditText" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -332,7 +525,7 @@
         android:layout_alignRight="@+id/breedStatusEditText"
         android:layout_alignEnd="@+id/breedStatusEditText" />
 
-    <EditText
+    <!--<EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/killPlaceEditText"
@@ -341,8 +534,44 @@
         android:layout_alignStart="@+id/killDepartmentEditText"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+        -->
 
     <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        android:ems="10"
+        android:id="@+id/killTimeEditText"
+        android:layout_alignBaseline="@+id/textView15"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:editable="false"/>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/freshKeepMethodSpinner"
+        android:entries="@array/freshkeepmethod"
+        android:layout_alignBaseline="@+id/textView129"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_toRightOf="@+id/textView129"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/freshKeepTimeEditText"
+        android:layout_alignBaseline="@+id/textView130"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <!--<EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/splitEditText"
@@ -361,31 +590,61 @@
         android:layout_alignStart="@+id/splitEditText"
         android:layout_alignRight="@+id/splitEditText"
         android:layout_alignEnd="@+id/splitEditText" />
+        -->
 
-    <EditText
+    <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/qualityEditText"
+        android:id="@+id/qualitySpinner"
+        android:entries="@array/quality"
         android:layout_alignBaseline="@+id/textView18"
-        android:layout_alignLeft="@+id/processEditText"
-        android:layout_alignStart="@+id/processEditText"
-        android:layout_alignRight="@+id/processEditText"
-        android:layout_alignEnd="@+id/processEditText" />
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_toRightOf="@+id/textView18"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="none"
-        android:ems="10"
-        android:id="@+id/killTimeEditText"
-        android:layout_alignBaseline="@+id/textView15"
-        android:layout_alignLeft="@+id/splitEditText"
-        android:layout_alignStart="@+id/splitEditText"
+        android:id="@+id/QCEditText"
+        android:layout_alignBaseline="@+id/textView131"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:editable="false"/>
+        android:layout_alignParentEnd="true" />
 
     <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/QAEditText"
+        android:layout_alignBaseline="@+id/textView132"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/furqualityEditText"
+        android:layout_alignBaseline="@+id/textView133"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/reservedEditText"
+        android:layout_alignBaseline="@+id/textView134"
+        android:layout_alignLeft="@+id/snEditText"
+        android:layout_alignStart="@+id/snEditText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <!--<EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="none"
@@ -397,6 +656,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:editable="false"/>
+        -->
 
     <Button
         android:layout_width="match_parent"
@@ -405,7 +665,7 @@
         android:id="@+id/saveButton"
         android:layout_gravity="right"
         android:layout_marginTop="20dp"
-        android:layout_below="@+id/textView19"
+        android:layout_below="@+id/textView134"
         android:layout_alignParentRight="true"
         android:background="#72cc55" />
 

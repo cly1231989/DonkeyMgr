@@ -83,8 +83,7 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
 
                     Message msg = new Message();
                     msg.what = MainActivity.AddItemHandler.MSG_ADD_CLAER_SEARCH;
-                    MainActivity.AddItemHandler addItemHandler = HandlerUtils.getAddItemHandler();
-                    addItemHandler.sendMessage(msg);
+                    HandlerUtils.getAddItemHandler().sendMessage(msg);
                 }
             }
         }

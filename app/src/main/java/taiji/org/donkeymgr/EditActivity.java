@@ -13,6 +13,8 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import taiji.org.donkeymgr.dao.Donkey;
 import taiji.org.donkeymgr.dao.DonkeyDao;
 import taiji.org.donkeymgr.utils.DaoUtils;
@@ -24,27 +26,39 @@ public class EditActivity extends ToolBarActivity {
     Donkey donkey;
     private DonkeyDao daonkeyDao;
 
-    EditText snEditText;
-    EditText farmerEditText;
-    EditText breedDddressEditText;
-    EditText dealTimeEditText;
-    EditText breedEditText;
-    Spinner  sexSpinner;
-    EditText ageWhenDealEditText;
-    EditText ageWhenKillEditText;
-    EditText feedEditText;
-    EditText healthEditText;
-    EditText breedStatusEditText;
-    EditText killDepartmentEditText;
-    EditText killPlaceEditText;
-    EditText splitEditText;
-    EditText processEditText;
-    EditText qualityEditText;
-    EditText killTimeEditText;
-    EditText factoryTimeEditText;
+    @BindView(R.id.snEditText) EditText snEditText;
+    @BindView(R.id.farmerEditText) EditText farmerEditText;
+    @BindView(R.id.breedAddressEditText) EditText breedAddressEditText;
+    @BindView(R.id.dealTimeEditText) EditText dealTimeEditText;
+    @BindView(R.id.supplierEditText) EditText supplierEditText;
+    @BindView(R.id.supplyAddressEditText) EditText supplyAddressEditText;
+    @BindView(R.id.supplyTimeEditText) EditText supplyTimeEditText;
+    @BindView(R.id.breedSpinner) Spinner breedSpinner;
+    @BindView(R.id.sexSpinner) Spinner  sexSpinner;
+    //@BindView(R.id.ageWhenKillEditText) EditText ageWhenDealEditText;
+    @BindView(R.id.ageWhenKillSpinner) Spinner ageWhenKillSpinner;
+    //@BindView EditText feedEditText;
+    @BindView(R.id.feedPatternSpinner) Spinner feedPatternSpinner;
+    @BindView(R.id.forageEditText) EditText forageEditText;
+    @BindView(R.id.healthEditText) EditText healthEditText;
+    @BindView(R.id.breedStatusEditText) EditText breedStatusEditText;
+    @BindView(R.id.killDepartmentEditText)  EditText killDepartmentEditText;
+    //@BindView(R.id.killPlaceEditText)  EditText killPlaceEditText;
+    @BindView(R.id.killTimeEditText) EditText killTimeEditText;
+    @BindView(R.id.freshKeepMethodSpinner) Spinner freshKeepMethodSpinner;
+    @BindView(R.id.freshKeepTimeEditText) EditText freshKeepTimeEditText;
+    //@BindView  EditText splitEditText;
+    //@BindView  EditText processEditText;
+    @BindView(R.id.qualitySpinner)  Spinner qualitySpinner;
+    @BindView(R.id.QCEditText)  EditText QCEditText;
+    @BindView(R.id.QAEditText)  EditText QAEditText;
+    @BindView(R.id.furqualityEditText)  EditText furqualityEditText;
+    @BindView(R.id.reservedEditText)  EditText reservedEditText;
 
-    Button saveButton;
-    Button clearButton;
+    //@BindView  EditText factoryTimeEditText;
+
+    @BindView(R.id.saveButton) Button saveButton;
+    @BindView(R.id.clearButton) Button clearButton;
     private Calendar calendar = Calendar.getInstance();
 
     @Override
@@ -52,28 +66,11 @@ public class EditActivity extends ToolBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-        daonkeyDao = DaoUtils.getDonkeyDao(this);
+        //View view = inflater.inflate(R.layout.activity_edit_page, container, false);
+        ButterKnife.setDebug(true);
+        ButterKnife.bind(this);
 
-        snEditText              = (EditText)findViewById(R.id.snEditText);
-        farmerEditText          = (EditText)findViewById(R.id.farmerEditText);
-        breedDddressEditText    = (EditText)findViewById(R.id.breedDddressEditText);
-        dealTimeEditText        = (EditText)findViewById(R.id.dealTimeEditText);
-        breedEditText           = (EditText)findViewById(R.id.breedEditText);
-        sexSpinner              = (Spinner)findViewById(R.id.sexSpinner);
-        ageWhenDealEditText     = (EditText)findViewById(R.id.ageWhenDealEditText);
-        ageWhenKillEditText     = (EditText)findViewById(R.id.ageWhenKillEditText);
-        feedEditText            = (EditText)findViewById(R.id.feedEditText);
-        healthEditText          = (EditText)findViewById(R.id.healthEditText);
-        breedStatusEditText     = (EditText)findViewById(R.id.breedStatusEditText);
-        killDepartmentEditText  = (EditText)findViewById(R.id.killDepartmentEditText);
-        killPlaceEditText       = (EditText)findViewById(R.id.killPlaceEditText);
-        splitEditText           = (EditText)findViewById(R.id.splitEditText);
-        processEditText         = (EditText)findViewById(R.id.processEditText);
-        qualityEditText         = (EditText)findViewById(R.id.qualityEditText);
-        killTimeEditText        = (EditText)findViewById(R.id.killTimeEditText);
-        factoryTimeEditText     = (EditText)findViewById(R.id.factoryTimeEditText);
-
-        saveButton = (Button)findViewById(R.id.saveButton);
+        daonkeyDao = DaoUtils.getDonkeyDao();
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,22 +94,29 @@ public class EditActivity extends ToolBarActivity {
 
                 donkey.setSn(sn);
                 donkey.setFarmer(farmerEditText.getText().toString());
-                donkey.setBreedaddress(breedDddressEditText.getText().toString());
+                donkey.setBreedaddress(breedAddressEditText.getText().toString());
                 donkey.setDealtime(dealTimeEditText.getText().toString());
-                donkey.setBreed(breedEditText.getText().toString());
+                donkey.setSupplier(supplierEditText.getText().toString());
+                donkey.setSupplyaddress(supplyAddressEditText.getText().toString());
+                donkey.setSupplytime(supplyTimeEditText.getText().toString());
+                donkey.setBreed((String) breedSpinner.getSelectedItem());
                 donkey.setSex((String) sexSpinner.getSelectedItem());
-                donkey.setAgewhendeal(ageWhenDealEditText.getText().toString());
-                donkey.setAgewhenkill(ageWhenKillEditText.getText().toString());
-                donkey.setFeedstatus(feedEditText.getText().toString());
+                donkey.setAgewhenkill((String)ageWhenKillSpinner.getSelectedItem());
+                donkey.setFeedpattern((String)feedPatternSpinner.getSelectedItem());
+                donkey.setForage(forageEditText.getText().toString());
                 donkey.setHealthstatus(healthEditText.getText().toString());
                 donkey.setBreedstatus(breedStatusEditText.getText().toString());
                 donkey.setKilldepartment(killDepartmentEditText.getText().toString());
-                donkey.setKillplace(killPlaceEditText.getText().toString());
-                donkey.setSplitstatus(splitEditText.getText().toString());
-                donkey.setProcessstatus(processEditText.getText().toString());
-                donkey.setQualitystatyus(qualityEditText.getText().toString());
+                //donkey.setKillplace(killPlaceEditText.getText().toString());
                 donkey.setKilltime(killTimeEditText.getText().toString());
-                donkey.setFactorytime(factoryTimeEditText.getText().toString());
+                donkey.setFreshkeepmethod((String)freshKeepMethodSpinner.getSelectedItem());
+                donkey.setFreshkeeptime(freshKeepTimeEditText.getText().toString());
+                donkey.setQualitystatus((String)qualitySpinner.getSelectedItem());
+                donkey.setQC(QCEditText.getText().toString());
+                donkey.setQA(QAEditText.getText().toString());
+                donkey.setFurquality(furqualityEditText.getText().toString());
+                donkey.setReserved(reservedEditText.getText().toString());
+
                 donkey.setSyncing(false);
                 donkey.setDeleteflag(false);
 
@@ -134,28 +138,34 @@ public class EditActivity extends ToolBarActivity {
             }
         });
 
-        clearButton = (Button)findViewById(R.id.clearButton);
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 snEditText.setText("");
                 farmerEditText.setText("");
-                breedDddressEditText.setText("");
+                breedAddressEditText.setText("");
                 dealTimeEditText.setText("");
-                breedEditText.setText("");
+                supplierEditText.setText("");
+                supplyAddressEditText.setText("");
+                supplyTimeEditText.setText("");
+                breedSpinner.setSelection(0);
                 sexSpinner.setSelection(0);
-                ageWhenDealEditText.setText("");
-                ageWhenKillEditText.setText("");
-                feedEditText.setText("");
+                ageWhenKillSpinner.setSelection(0);
+                feedPatternSpinner.setSelection(0);
+                forageEditText.setText("");
                 healthEditText.setText("");
                 breedStatusEditText.setText("");
                 killDepartmentEditText.setText("");
-                killPlaceEditText.setText("");
+                //killPlaceEditText.setText("");
                 killTimeEditText.setText("");
-                splitEditText.setText("");
-                processEditText.setText("");
-                qualityEditText.setText("");
-                factoryTimeEditText.setText("");
+                freshKeepMethodSpinner.setSelection(0);
+                freshKeepTimeEditText.setText("");
+                qualitySpinner.setSelection(0);
+                QCEditText.setText("");
+                QAEditText.setText("");
+                furqualityEditText.setText("");
+                reservedEditText.setText("");
             }
         });
 
@@ -163,6 +173,15 @@ public class EditActivity extends ToolBarActivity {
             @Override
             public void onClick(View v) {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(EditActivity.this, dealTimeSet, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH) );
+                datePickerDialog.show();
+            }
+        });
+
+        supplyTimeEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(EditActivity.this,  supplyTimeSet, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH) );
                 datePickerDialog.show();
             }
@@ -177,14 +196,14 @@ public class EditActivity extends ToolBarActivity {
             }
         });
 
-        factoryTimeEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(EditActivity.this, factoryTimeSet, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH) );
-                datePickerDialog.show();
-            }
-        });
+//        factoryTimeEditText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DatePickerDialog datePickerDialog = new DatePickerDialog(EditActivity.this, factoryTimeSet, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+//                        calendar.get(Calendar.DAY_OF_MONTH) );
+//                datePickerDialog.show();
+//            }
+//        });
 
         Intent intent = this.getIntent();
         String number = intent.getStringExtra("num");
@@ -199,30 +218,45 @@ public class EditActivity extends ToolBarActivity {
 
         donkey = donkeys.get(0);
         farmerEditText.setText(donkey.getFarmer());
-        breedDddressEditText.setText(donkey.getBreedaddress());
+        breedAddressEditText.setText(donkey.getBreedaddress());
         dealTimeEditText.setText(donkey.getDealtime());
-        breedEditText.setText(donkey.getBreed());
-        ageWhenDealEditText.setText(donkey.getAgewhendeal());
-        ageWhenKillEditText.setText(donkey.getAgewhenkill());
-        feedEditText.setText(donkey.getFeedstatus());
+        supplierEditText.setText(donkey.getSupplier());
+        supplyAddressEditText.setText(donkey.getSupplyaddress());
+        supplyTimeEditText.setText(donkey.getSupplytime());
+        updateSpinner(breedSpinner, donkey.getBreed());
+        updateSpinner(sexSpinner, donkey.getSex());
+        updateSpinner(ageWhenKillSpinner, donkey.getAgewhenkill());
+        updateSpinner(feedPatternSpinner, donkey.getFeedpattern());
+        forageEditText.setText(donkey.getForage());
         healthEditText.setText(donkey.getHealthstatus());
         breedStatusEditText.setText(donkey.getBreedstatus());
         killDepartmentEditText.setText(donkey.getKilldepartment());
-        killPlaceEditText.setText(donkey.getKillplace());
-        splitEditText.setText(donkey.getSplitstatus());
-        processEditText.setText(donkey.getProcessstatus());
-        qualityEditText.setText(donkey.getQualitystatyus());
+        //killPlaceEditText.setText(donkey.getKillplace());
         killTimeEditText.setText(donkey.getKilltime());
-        factoryTimeEditText.setText(donkey.getFactorytime());
+        updateSpinner(freshKeepMethodSpinner, donkey.getFreshkeepmethod());
+        freshKeepTimeEditText.setText(donkey.getFreshkeeptime());
+        updateSpinner(qualitySpinner, donkey.getQualitystatus());
+        QCEditText.setText(donkey.getQC());
+        QAEditText.setText(donkey.getQA());
+        furqualityEditText.setText(donkey.getFurquality());
+        reservedEditText.setText(donkey.getReserved());
+    }
 
-        String sex = donkey.getSex();
-        for (int i = 0; i < sexSpinner.getCount(); i++) {
-            String itemValue = (String)sexSpinner.getItemAtPosition(i);
-            if (sex.compareToIgnoreCase(itemValue) == 0) {
-                sexSpinner.setSelection(i);
-                break;
+    private void updateSpinner(Spinner spinner, String text){
+        if (text == null){
+            spinner.setSelection(0);
+            return;
+        }
+
+        for (int i = 0; i < spinner.getCount(); i++) {
+            String itemValue = (String)spinner.getItemAtPosition(i);
+            if (text.compareToIgnoreCase(itemValue) == 0) {
+                spinner.setSelection(i);
+                return;
             }
         }
+
+        spinner.setSelection(0);
     }
 
     private DatePickerDialog.OnDateSetListener dealTimeSet = new DatePickerDialog.OnDateSetListener() {
@@ -231,7 +265,7 @@ public class EditActivity extends ToolBarActivity {
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
 
-            String date = year + "-" + monthOfYear + "-" + dayOfMonth;
+            String date = year + "-" + (monthOfYear+1) + "-" + dayOfMonth;
             dealTimeEditText.setText(date);
         }
     };
@@ -241,18 +275,30 @@ public class EditActivity extends ToolBarActivity {
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
 
-            String date = year + "-" + monthOfYear + "-" + dayOfMonth;
+            String date = year + "-" + (monthOfYear+1) + "-" + dayOfMonth;
             killTimeEditText.setText(date);
         }
     };
+
+    private DatePickerDialog.OnDateSetListener  supplyTimeSet = new DatePickerDialog.OnDateSetListener() {
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+
+            String date = year + "-" + (monthOfYear+1) + "-" + dayOfMonth;
+            supplyTimeEditText.setText(date);
+        }
+    };
+
     private DatePickerDialog.OnDateSetListener factoryTimeSet = new DatePickerDialog.OnDateSetListener() {
 
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
 
-            String date = year + "-" + monthOfYear + "-" + dayOfMonth;
-            factoryTimeEditText.setText(date);
+            String date = year + "-" + (monthOfYear+1) + "-" + dayOfMonth;
+            //factoryTimeEditText.setText(date);
         }
     };
 }

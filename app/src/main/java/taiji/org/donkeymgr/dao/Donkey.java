@@ -10,20 +10,31 @@ public class Donkey {
     private int sn;
     private String farmer;
     private String breedaddress;
+    private String supplier;
+    private String supplyaddress;
     private String dealtime;
+    private String supplytime;
     private String breed;
     private String sex;
     private String agewhendeal;
     private String agewhenkill;
+    private String feedpattern;
+    private String forage;
     private String feedstatus;
     private String healthstatus;
     private String breedstatus;
     private String killdepartment;
     private String killplace;
     private String killtime;
+    private String freshkeepmethod;
+    private String freshkeeptime;
     private String splitstatus;
     private String processstatus;
-    private String qualitystatyus;
+    private String qualitystatus;
+    private String QC;
+    private String QA;
+    private String furquality;
+    private String reserved;
     private String factorytime;
     private Long version;
     private Long syncver;
@@ -34,33 +45,44 @@ public class Donkey {
     public Donkey() {
     }
 
-    public boolean hasSync(){
-        return (syncver == version);
-    }
-
     public Donkey(Long id) {
         this.id = id;
     }
 
-    public Donkey(Long id, int sn, String farmer, String breedaddress, String dealtime, String breed, String sex, String agewhendeal, String agewhenkill, String feedstatus, String healthstatus, String breedstatus, String killdepartment, String killplace, String killtime, String splitstatus, String processstatus, String qualitystatyus, String factorytime, Long version, Long syncver, Long idonserver, Boolean syncing, Boolean deleteflag) {
+    public boolean hasSync(){
+        return syncver == version;
+    }
+
+    public Donkey(Long id, int sn, String farmer, String breedaddress, String supplier, String supplyaddress, String dealtime, String supplytime, String breed, String sex, String agewhendeal, String agewhenkill, String feedpattern, String forage, String feedstatus, String healthstatus, String breedstatus, String killdepartment, String killplace, String killtime, String freshkeepmethod, String freshkeeptime, String splitstatus, String processstatus, String qualitystatus, String QC, String QA, String furquality, String reserved, String factorytime, Long version, Long syncver, Long idonserver, Boolean syncing, Boolean deleteflag) {
         this.id = id;
         this.sn = sn;
         this.farmer = farmer;
         this.breedaddress = breedaddress;
+        this.supplier = supplier;
+        this.supplyaddress = supplyaddress;
         this.dealtime = dealtime;
+        this.supplytime = supplytime;
         this.breed = breed;
         this.sex = sex;
         this.agewhendeal = agewhendeal;
         this.agewhenkill = agewhenkill;
+        this.feedpattern = feedpattern;
+        this.forage = forage;
         this.feedstatus = feedstatus;
         this.healthstatus = healthstatus;
         this.breedstatus = breedstatus;
         this.killdepartment = killdepartment;
         this.killplace = killplace;
         this.killtime = killtime;
+        this.freshkeepmethod = freshkeepmethod;
+        this.freshkeeptime = freshkeeptime;
         this.splitstatus = splitstatus;
         this.processstatus = processstatus;
-        this.qualitystatyus = qualitystatyus;
+        this.qualitystatus = qualitystatus;
+        this.QC = QC;
+        this.QA = QA;
+        this.furquality = furquality;
+        this.reserved = reserved;
         this.factorytime = factorytime;
         this.version = version;
         this.syncver = syncver;
@@ -101,12 +123,36 @@ public class Donkey {
         this.breedaddress = breedaddress;
     }
 
+    public String getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
+    }
+
+    public String getSupplyaddress() {
+        return supplyaddress;
+    }
+
+    public void setSupplyaddress(String supplyaddress) {
+        this.supplyaddress = supplyaddress;
+    }
+
     public String getDealtime() {
         return dealtime;
     }
 
     public void setDealtime(String dealtime) {
         this.dealtime = dealtime;
+    }
+
+    public String getSupplytime() {
+        return supplytime;
+    }
+
+    public void setSupplytime(String supplytime) {
+        this.supplytime = supplytime;
     }
 
     public String getBreed() {
@@ -139,6 +185,22 @@ public class Donkey {
 
     public void setAgewhenkill(String agewhenkill) {
         this.agewhenkill = agewhenkill;
+    }
+
+    public String getFeedpattern() {
+        return feedpattern;
+    }
+
+    public void setFeedpattern(String feedpattern) {
+        this.feedpattern = feedpattern;
+    }
+
+    public String getForage() {
+        return forage;
+    }
+
+    public void setForage(String forage) {
+        this.forage = forage;
     }
 
     public String getFeedstatus() {
@@ -189,6 +251,22 @@ public class Donkey {
         this.killtime = killtime;
     }
 
+    public String getFreshkeepmethod() {
+        return freshkeepmethod;
+    }
+
+    public void setFreshkeepmethod(String freshkeepmethod) {
+        this.freshkeepmethod = freshkeepmethod;
+    }
+
+    public String getFreshkeeptime() {
+        return freshkeeptime;
+    }
+
+    public void setFreshkeeptime(String freshkeeptime) {
+        this.freshkeeptime = freshkeeptime;
+    }
+
     public String getSplitstatus() {
         return splitstatus;
     }
@@ -205,12 +283,44 @@ public class Donkey {
         this.processstatus = processstatus;
     }
 
-    public String getQualitystatyus() {
-        return qualitystatyus;
+    public String getQualitystatus() {
+        return qualitystatus;
     }
 
-    public void setQualitystatyus(String qualitystatyus) {
-        this.qualitystatyus = qualitystatyus;
+    public void setQualitystatus(String qualitystatus) {
+        this.qualitystatus = qualitystatus;
+    }
+
+    public String getQC() {
+        return QC;
+    }
+
+    public void setQC(String QC) {
+        this.QC = QC;
+    }
+
+    public String getQA() {
+        return QA;
+    }
+
+    public void setQA(String QA) {
+        this.QA = QA;
+    }
+
+    public String getFurquality() {
+        return furquality;
+    }
+
+    public void setFurquality(String furquality) {
+        this.furquality = furquality;
+    }
+
+    public String getReserved() {
+        return reserved;
+    }
+
+    public void setReserved(String reserved) {
+        this.reserved = reserved;
     }
 
     public String getFactorytime() {

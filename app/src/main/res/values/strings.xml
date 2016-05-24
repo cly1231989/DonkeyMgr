@@ -4,7 +4,7 @@
 
     <string name="header_text">The Header</string>
     <string name="footer_text">The Footer</string>
-    <string name="search_text">搜索</string>
+    <string name="search_text">请输入编号或者养殖户</string>
     <string name="scan_text">请将二维码放入框内</string>
 
 

@@ -12,7 +12,13 @@ import android.widget.Toast;
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView.OnQRCodeReadListener;
 
+import org.greenrobot.eventbus.EventBus;
+
+import taiji.org.donkeymgr.msgs.QRCodeScanResult;
+import taiji.org.donkeymgr.utils.HandlerUtils;
+
 public class QRCodeScanActivity extends ToolBarActivity implements OnQRCodeReadListener {
+    private boolean first = true;
     private QRCodeReaderView qrCodeReader;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +46,19 @@ public class QRCodeScanActivity extends ToolBarActivity implements OnQRCodeReadL
     @Override
     public void onQRCodeRead(String text, PointF[] points) {
         //myTextView.setText(text);
-        Intent intent = new Intent();
-        intent.putExtra("QRCode", text);
 
-        setResult(RESULT_OK, intent);
+        Integer sn = 0;
+        try {
+            sn = Integer.parseInt(text.substring(text.lastIndexOf("/") + 1));
+        }catch (NumberFormatException e){
+            return;
+        }
+
+        if (!first)
+            return;
+
+        first = false;
+        EventBus.getDefault().post(new QRCodeScanResult(sn));
         finish();
     }
 
@@ -58,6 +73,6 @@ public class QRCodeScanActivity extends ToolBarActivity implements OnQRCodeReadL
     // Called when there's no QR codes in the camera preview image
     @Override
     public void QRCodeNotFoundOnCamImage() {
-        Toast.makeText(this, "没有扫描到二维码，请重新尝试", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "没有扫描到二维码，请重新尝试", Toast.LENGTH_SHORT).show();
     }
 }

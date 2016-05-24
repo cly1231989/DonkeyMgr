@@ -12,7 +12,10 @@ import com.alibaba.fastjson.JSON;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
+
 import taiji.org.donkeymgr.bean.OperaResult;
+import taiji.org.donkeymgr.msgs.LogoutMsgEvent;
 import taiji.org.donkeymgr.utils.SettingUtils;
 
 public class ModifyPwdActivity extends ToolBarActivity {
@@ -40,8 +43,7 @@ public class ModifyPwdActivity extends ToolBarActivity {
         modifyPwdBtn.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
-                                                String url = "http://192.168.1.100:8080/DonkeyMgrSystem/user/pwd";
-
+                                                String url = SettingUtils.makeServerAddress(ModifyPwdActivity.this, "user/pwd");
                                                 if (oldPwdEditText.getText().length() == 0) {
                                                     Toast.makeText(v.getContext(), "请输入原密码", Toast.LENGTH_SHORT).show();
                                                     return;
@@ -83,9 +85,9 @@ public class ModifyPwdActivity extends ToolBarActivity {
                                                             OperaResult operaResult = JSON.parseObject(response, OperaResult.class);
                                                             if (operaResult.isSuccess()) {
                                                                 Toast.makeText(ModifyPwdActivity.this, "密码修改成功", Toast.LENGTH_SHORT).show();
-                                                                Intent intent = new Intent();
-                                                                intent.putExtra("result", 0);
-                                                                setResult(RESULT_OK, intent);
+//                                                                Intent intent = new Intent();
+//                                                                intent.putExtra("result", 0);
+//                                                                setResult(RESULT_OK, intent);
                                                                 ModifyPwdActivity.this.finish();
                                                             } else if (operaResult.getResult().compareToIgnoreCase("old_pwd_error") == 0) {
                                                                 Toast.makeText(ModifyPwdActivity.this, "原密码错误，请重新输入", Toast.LENGTH_SHORT).show();
@@ -120,9 +122,7 @@ public class ModifyPwdActivity extends ToolBarActivity {
 
                 SettingUtils.setIsOnline(false);
                 SettingUtils.clearUserInfo(ModifyPwdActivity.this);
-                Intent intent = new Intent();
-                intent.putExtra("result", 1);
-                setResult(RESULT_OK, intent);
+                EventBus.getDefault().post(new LogoutMsgEvent());
                 ModifyPwdActivity.this.finish();
             }
         });

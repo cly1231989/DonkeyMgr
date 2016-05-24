@@ -18,10 +18,8 @@
         android:textSize="@dimen/sp_16"
         android:textColor="#CBC3AF"
         android:textColorHint="#CBC3AF"
-        android:textAlignment="center"
         android:id="@+id/searchEditText"
         android:imeOptions="actionSearch"
-        android:numeric="integer"
         android:layout_weight="1" />
 
 </LinearLayout>

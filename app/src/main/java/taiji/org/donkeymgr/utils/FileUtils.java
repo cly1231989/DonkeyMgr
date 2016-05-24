@@ -3,15 +3,20 @@ package taiji.org.donkeymgr.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.FileChannel;
+import java.util.List;
 
+import cn.finalteam.galleryfinal.model.PhotoInfo;
 import taiji.org.donkeymgr.dao.Donkey;
 import taiji.org.donkeymgr.dao.DonkeyDao;
+import taiji.org.donkeymgr.dao.UploadImageInfo;
 
 /**
  * Created by hose on 2016/4/3.
@@ -70,27 +75,55 @@ public class FileUtils {
         deleteDirBySn(context, donkey.getSn());
     }
 
-    public static boolean copyFile(String oldPath, String newPath) {
-        try {
-            int bytesum = 0;
-            int byteread = 0;
-            File oldfile = new File(oldPath);
-            if (oldfile.exists()) {
-                InputStream inStream = new FileInputStream(oldPath);
-                FileOutputStream fs = new FileOutputStream(newPath);
-                byte[] buffer = new byte[1444];
-                int length;
-                while ( (byteread = inStream.read(buffer)) != -1) {
-                    bytesum += byteread; //字节数 文件大小
-                    System.out.println(bytesum);
-                    fs.write(buffer, 0, byteread);
-                }
-                inStream.close();
+    public static void makeUploadImageInfos(Context context, List<PhotoInfo> resultList, String mageDirPath, Donkey donkey){
+        for (PhotoInfo photo: resultList) {
+            String imagePath = FileUtils.getImageName(mageDirPath);
+            FileUtils.copyFile(photo.getPhotoPath(), imagePath);
+            File image = new File(imagePath);
+            if(!image.exists()){
+                Toast.makeText(context, "copy file failed", Toast.LENGTH_SHORT).show();
+                continue;
             }
+
+            String uploadImageUrl = SettingUtils.makeServerAddress(context, "donkey/images/upload");
+            UploadImageInfo uploadImageInfo = new UploadImageInfo(donkey.getId(), donkey.getIdonserver(), imagePath , uploadImageUrl);
+            DaoUtils.getUploadImageDao().insert(uploadImageInfo);
         }
-        catch (Exception e) {
+        UploadImageThread.getInstance().startSync();
+    }
+
+    public static boolean copyFile(String oldPath, String newPath) {
+        File sourceFile = new File(oldPath);
+        File destFile = new File(newPath);
+
+        FileChannel in = null;
+        FileChannel out = null;
+        FileInputStream inStream = null;
+        FileOutputStream outStream = null;
+        try {
+            inStream = new FileInputStream(sourceFile);
+            outStream = new FileOutputStream(destFile);
+            in = inStream.getChannel();
+            out = outStream.getChannel();
+            in.transferTo(0, in.size(), out);
+        } catch (IOException e) {
             e.printStackTrace();
-            return false;
+        } finally {
+            try {
+                if(inStream != null)
+                    inStream.close();
+
+                if(in != null)
+                    in.close();
+
+                if(outStream != null)
+                    outStream.close();
+
+                if(out != null)
+                    out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return true;

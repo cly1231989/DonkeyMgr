@@ -13,9 +13,12 @@ import com.alibaba.fastjson.JSON;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
+
 import okhttp3.Call;
 import taiji.org.donkeymgr.bean.OperaResult;
 import taiji.org.donkeymgr.bean.UserInfo;
+import taiji.org.donkeymgr.msgs.LoginResultMsgEvent;
 import taiji.org.donkeymgr.utils.SettingUtils;
 
 public class LoginActivity extends ToolBarActivity {
@@ -33,6 +36,14 @@ public class LoginActivity extends ToolBarActivity {
         accountEditText = (EditText)findViewById(R.id.accountEditText);
         pwdEditText = (EditText)findViewById(R.id.pwdEditText);
         remeberCheckBox = (CheckBox)findViewById(R.id.remeberCheckBox);
+
+        UserInfo userInfo = new UserInfo();
+        SettingUtils.getUserInfo(this, userInfo);
+        if(userInfo.getUsername().compareTo("") != 0) {
+            accountEditText.setText(userInfo.getUsername());
+            pwdEditText.setText(userInfo.getPwd());
+            remeberCheckBox.setChecked(true);
+        }
 
         loginBtn.setOnClickListener(loginClick);
 
@@ -84,18 +95,12 @@ public class LoginActivity extends ToolBarActivity {
                                 SettingUtils.setIsOnline(false);
                                 Toast.makeText(LoginActivity.this, "账号或密码错误，请重新输入", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                SettingUtils.setIsOnline(true);
-
                                 if (remeberCheckBox.isChecked()) {
                                     UserInfo userInfo = new UserInfo( accountEditText.getText().toString(), pwdEditText.getText().toString() );
                                     SettingUtils.saveUserInfo(LoginActivity.this, userInfo);
                                 }
 
-                                Intent intent = new Intent();
-                                intent.putExtra("result", 1);
-
-                                setResult(RESULT_OK, intent);
+                                EventBus.getDefault().post( new LoginResultMsgEvent(true) );
                                 LoginActivity.this.finish();
                             }
                         }

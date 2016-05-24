@@ -1,11 +1,13 @@
 package taiji.org.donkeymgr.bean;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by hose on 2016/4/3.
  */
 public class ImageItemInfo {
-    public ImageItemInfo(String localImagePath, String remoteImagePath) {
-        this.localImagePath = localImagePath;
+    public ImageItemInfo(Bitmap image, String remoteImagePath) {
+        this.image = image;
         this.remoteImagePath = remoteImagePath;
     }
 
@@ -17,14 +19,14 @@ public class ImageItemInfo {
         this.remoteImagePath = remoteImagePath;
     }
 
-    public String getLocalImagePath() {
-        return localImagePath;
+    public Bitmap getImage() {
+        return image;
     }
 
-    public void setLocalImagePath(String localImagePath) {
-        this.localImagePath = localImagePath;
+    public void setImage(Bitmap image) {
+        this.image = image;
     }
 
-    String localImagePath;
+    Bitmap image;
     String remoteImagePath;
 }
