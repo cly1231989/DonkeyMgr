@@ -36,7 +36,7 @@ public class EditActivity extends ToolBarActivity {
     @BindView(R.id.breedSpinner) Spinner breedSpinner;
     @BindView(R.id.sexSpinner) Spinner  sexSpinner;
     //@BindView(R.id.ageWhenKillEditText) EditText ageWhenDealEditText;
-    @BindView(R.id.ageWhenKillSpinner) Spinner ageWhenKillSpinner;
+    @BindView(R.id.ageWhenKillEditText) EditText ageWhenKillEditText;
     //@BindView EditText feedEditText;
     @BindView(R.id.feedPatternSpinner) Spinner feedPatternSpinner;
     @BindView(R.id.forageEditText) EditText forageEditText;
@@ -67,7 +67,6 @@ public class EditActivity extends ToolBarActivity {
         setContentView(R.layout.activity_edit);
 
         //View view = inflater.inflate(R.layout.activity_edit_page, container, false);
-        ButterKnife.setDebug(true);
         ButterKnife.bind(this);
 
         daonkeyDao = DaoUtils.getDonkeyDao();
@@ -101,7 +100,9 @@ public class EditActivity extends ToolBarActivity {
                 donkey.setSupplytime(supplyTimeEditText.getText().toString());
                 donkey.setBreed((String) breedSpinner.getSelectedItem());
                 donkey.setSex((String) sexSpinner.getSelectedItem());
-                donkey.setAgewhenkill((String)ageWhenKillSpinner.getSelectedItem());
+                if( ageWhenKillEditText.getText().toString().length() != 0 )
+                    donkey.setAgewhenkill(ageWhenKillEditText.getText().toString() + "岁");
+
                 donkey.setFeedpattern((String)feedPatternSpinner.getSelectedItem());
                 donkey.setForage(forageEditText.getText().toString());
                 donkey.setHealthstatus(healthEditText.getText().toString());
@@ -151,7 +152,7 @@ public class EditActivity extends ToolBarActivity {
                 supplyTimeEditText.setText("");
                 breedSpinner.setSelection(0);
                 sexSpinner.setSelection(0);
-                ageWhenKillSpinner.setSelection(0);
+                ageWhenKillEditText.setText("");
                 feedPatternSpinner.setSelection(0);
                 forageEditText.setText("");
                 healthEditText.setText("");
@@ -225,7 +226,9 @@ public class EditActivity extends ToolBarActivity {
         supplyTimeEditText.setText(donkey.getSupplytime());
         updateSpinner(breedSpinner, donkey.getBreed());
         updateSpinner(sexSpinner, donkey.getSex());
-        updateSpinner(ageWhenKillSpinner, donkey.getAgewhenkill());
+        if(donkey.getAgewhenkill() != null && donkey.getAgewhenkill().length() >= 2)
+            ageWhenKillEditText.setText(donkey.getAgewhenkill().substring(0,donkey.getAgewhenkill().length()-1 ));
+
         updateSpinner(feedPatternSpinner, donkey.getFeedpattern());
         forageEditText.setText(donkey.getForage());
         healthEditText.setText(donkey.getHealthstatus());

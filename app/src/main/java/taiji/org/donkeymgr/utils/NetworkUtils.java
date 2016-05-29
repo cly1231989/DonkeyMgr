@@ -197,7 +197,9 @@ public class NetworkUtils {
             donkeyLocal.setBreed(donkey.getBreed());
             donkeyLocal.setSex(donkey.getSex());
             donkeyLocal.setAgewhendeal(donkey.getAgewhendeal());
-            donkeyLocal.setAgewhenkill(donkey.getAgewhenkill().substring(0, donkey.getAgewhenkill().length()-1) );
+            //if(donkey.getAgewhenkill() != null && donkey.getAgewhenkill().length() >= 2 )
+                donkeyLocal.setAgewhenkill(donkey.getAgewhenkill());
+
             donkeyLocal.setFeedpattern(donkey.getFeedpattern());
             donkeyLocal.setForage(donkey.getForage());
             donkeyLocal.setFeedstatus(donkey.getFeedstatus());
@@ -268,7 +270,7 @@ public class NetworkUtils {
             addStringToMap("breed",          donkey.getBreed(), paras);
             addStringToMap("sex",            donkey.getSex(), paras);
             addStringToMap("agewhendeal",    donkey.getAgewhendeal(), paras);
-            addStringToMap("agewhenkill",    donkey.getAgewhenkill()+"岁", paras);
+            addStringToMap("agewhenkill",    donkey.getAgewhenkill(), paras);
             addStringToMap("feedpattern",    donkey.getFeedpattern(), paras);
             addStringToMap("forage",          donkey.getForage(), paras);
             addStringToMap("feedstatus",     donkey.getFeedstatus(), paras);

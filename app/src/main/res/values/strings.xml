@@ -17,5 +17,36 @@
         <item>雌性</item>
         <item>阉割</item>
     </string-array>
+    <string-array name="breed" >
+        <item >关中驴</item>
+        <item >德州驴</item>
+        <item >华北驴</item>
+        <item >其他</item>
+    </string-array>
+    <string-array name="feedpattern" >
+        <item >圈养</item>
+        <item >放养</item>
+    </string-array>
+    <string-array name="freshkeepmethod" >
+        <item >鲜肉</item>
+        <item >冻肉</item>
+    </string-array>
+    <string-array name="quality" >
+        <item >合格</item>
+        <item >不合格</item>
+    </string-array>
+    <string-array name="age" >
+        <item >1</item>
+        <item >2</item>
+        <item >3</item>
+        <item >4</item>
+        <item >5</item>
+        <item >6</item>
+        <item >7</item>
+        <item >8</item>
+        <item >9</item>
+        <item >10</item>
+    </string-array>
+
     <string name="title_activity_main2">Main2Activity</string>
 </resources>

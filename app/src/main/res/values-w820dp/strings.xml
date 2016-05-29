@@ -1,8 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="donkey_sex" >
-        <item >雄性</item>
-        <item >雌性</item>
-        <item >阉割</item>
-    </string-array>
 </resources>
