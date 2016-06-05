@@ -233,10 +233,10 @@ public abstract class RecyclerViewDragHolder {
                 if (left != viewX) {
                     if (bgView.getVisibility() == View.GONE) {
                         TextView uploadImage = (TextView) bgView.findViewById(R.id.upload_image);
-                        if ( SettingUtils.isOnline() )
-                            uploadImage.setText("编辑图片");
-                        else
+                        if (!SettingUtils.isOnline(context) || !SettingUtils.isLogin())
                             uploadImage.setText("添加图片");
+                        else
+                            uploadImage.setText("编辑图片");
 
                         bgView.setVisibility(View.VISIBLE);
                     }

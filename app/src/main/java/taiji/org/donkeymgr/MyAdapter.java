@@ -171,7 +171,7 @@ public class MyAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     selectedItemNum = Integer.parseInt(stringArrayList.get(position));
 
-                    if (!SettingUtils.isOnline()) {
+                    if (!SettingUtils.isOnline(context) || !SettingUtils.isLogin()) {
                         AddImageUtils addImageUtils = new AddImageUtils(context, ((MainActivity) context).getSupportFragmentManager(), selectedItemNum, donkeyDao, mOnHanlderResultCallback);
                         addImageUtils.showAddImageBtn();
                     } else {

@@ -267,8 +267,10 @@ public class NetworkUtils {
             addStringToMap("supplyaddress", donkey.getSupplyaddress(), paras);
             addStringToMap("dealtime",       donkey.getDealtime(), paras);
             addStringToMap("supplytime",     donkey.getSupplytime(), paras);
-            addStringToMap("breed",          donkey.getBreed(), paras);
-            addStringToMap("sex",            donkey.getSex(), paras);
+            addStringToMap("breed",           Integer.toString(donkey.getBreed()), paras);
+            addStringToMap("sex",             Integer.toString(donkey.getSex()), paras);
+            if(donkey.getStockstatus () != null )
+                addStringToMap("stockstatus",    Integer.toString(donkey.getStockstatus ()), paras);
             addStringToMap("agewhendeal",    donkey.getAgewhendeal(), paras);
             addStringToMap("agewhenkill",    donkey.getAgewhenkill(), paras);
             addStringToMap("feedpattern",    donkey.getFeedpattern(), paras);

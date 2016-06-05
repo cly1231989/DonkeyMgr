@@ -38,7 +38,7 @@ public class UploadImageThread extends Thread{
         uploadImageHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
-                if( !SettingUtils.isOnline() )
+                if( !SettingUtils.isLogin() )
                     return;
                 
                 UploadImageInfoDao uploadImageInfoDao = DaoUtils.getUploadImageDao();

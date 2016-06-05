@@ -14,8 +14,8 @@ public class Donkey {
     private String supplyaddress;
     private String dealtime;
     private String supplytime;
-    private String breed;
-    private String sex;
+    private Integer breed;
+    private Integer sex;
     private String agewhendeal;
     private String agewhenkill;
     private String feedpattern;
@@ -36,6 +36,7 @@ public class Donkey {
     private String furquality;
     private String reserved;
     private String factorytime;
+    private Integer stockstatus;
     private Long version;
     private Long syncver;
     private Long idonserver;
@@ -45,15 +46,15 @@ public class Donkey {
     public Donkey() {
     }
 
+    public boolean hasSync(){
+        return (version == syncver);
+    }
+
     public Donkey(Long id) {
         this.id = id;
     }
 
-    public boolean hasSync(){
-        return syncver == version;
-    }
-
-    public Donkey(Long id, int sn, String farmer, String breedaddress, String supplier, String supplyaddress, String dealtime, String supplytime, String breed, String sex, String agewhendeal, String agewhenkill, String feedpattern, String forage, String feedstatus, String healthstatus, String breedstatus, String killdepartment, String killplace, String killtime, String freshkeepmethod, String freshkeeptime, String splitstatus, String processstatus, String qualitystatus, String QC, String QA, String furquality, String reserved, String factorytime, Long version, Long syncver, Long idonserver, Boolean syncing, Boolean deleteflag) {
+    public Donkey(Long id, int sn, String farmer, String breedaddress, String supplier, String supplyaddress, String dealtime, String supplytime, Integer breed, Integer sex, String agewhendeal, String agewhenkill, String feedpattern, String forage, String feedstatus, String healthstatus, String breedstatus, String killdepartment, String killplace, String killtime, String freshkeepmethod, String freshkeeptime, String splitstatus, String processstatus, String qualitystatus, String QC, String QA, String furquality, String reserved, String factorytime, Integer stockstatus, Long version, Long syncver, Long idonserver, Boolean syncing, Boolean deleteflag) {
         this.id = id;
         this.sn = sn;
         this.farmer = farmer;
@@ -84,6 +85,7 @@ public class Donkey {
         this.furquality = furquality;
         this.reserved = reserved;
         this.factorytime = factorytime;
+        this.stockstatus = stockstatus;
         this.version = version;
         this.syncver = syncver;
         this.idonserver = idonserver;
@@ -155,19 +157,19 @@ public class Donkey {
         this.supplytime = supplytime;
     }
 
-    public String getBreed() {
+    public Integer getBreed() {
         return breed;
     }
 
-    public void setBreed(String breed) {
+    public void setBreed(Integer breed) {
         this.breed = breed;
     }
 
-    public String getSex() {
+    public Integer getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(Integer sex) {
         this.sex = sex;
     }
 
@@ -329,6 +331,14 @@ public class Donkey {
 
     public void setFactorytime(String factorytime) {
         this.factorytime = factorytime;
+    }
+
+    public Integer getStockstatus() {
+        return stockstatus;
+    }
+
+    public void setStockstatus(Integer stockstatus) {
+        this.stockstatus = stockstatus;
     }
 
     public Long getVersion() {

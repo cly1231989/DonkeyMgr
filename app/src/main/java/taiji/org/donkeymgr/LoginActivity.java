@@ -1,7 +1,6 @@
 package taiji.org.donkeymgr;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -82,7 +81,7 @@ public class LoginActivity extends ToolBarActivity {
                         @Override
                         public void onError(Call call, Exception e) {
                             p_dialog.cancel();
-                            SettingUtils.setIsOnline(false);
+                            SettingUtils.setIsLogin(false);
                             Toast.makeText(LoginActivity.this, "登录过程发生错误 " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         }
 
@@ -92,7 +91,7 @@ public class LoginActivity extends ToolBarActivity {
 
                             OperaResult operaResult = JSON.parseObject(response, OperaResult.class);
                             if (!operaResult.isSuccess()) {
-                                SettingUtils.setIsOnline(false);
+                                SettingUtils.setIsLogin(false);
                                 Toast.makeText(LoginActivity.this, "账号或密码错误，请重新输入", Toast.LENGTH_SHORT).show();
                             } else {
                                 if (remeberCheckBox.isChecked()) {

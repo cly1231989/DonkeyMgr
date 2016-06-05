@@ -98,8 +98,10 @@ public class EditActivity extends ToolBarActivity {
                 donkey.setSupplier(supplierEditText.getText().toString());
                 donkey.setSupplyaddress(supplyAddressEditText.getText().toString());
                 donkey.setSupplytime(supplyTimeEditText.getText().toString());
-                donkey.setBreed((String) breedSpinner.getSelectedItem());
-                donkey.setSex((String) sexSpinner.getSelectedItem());
+                donkey.setBreed(breedSpinner.getSelectedItemPosition() + 1);
+                donkey.setSex(sexSpinner.getSelectedItemPosition() + 1);
+                //donkey.setBreed((String) breedSpinner.getSelectedItem());
+                //donkey.setSex((String) sexSpinner.getSelectedItem());
                 if( ageWhenKillEditText.getText().toString().length() != 0 )
                     donkey.setAgewhenkill(ageWhenKillEditText.getText().toString() + "岁");
 
@@ -224,8 +226,10 @@ public class EditActivity extends ToolBarActivity {
         supplierEditText.setText(donkey.getSupplier());
         supplyAddressEditText.setText(donkey.getSupplyaddress());
         supplyTimeEditText.setText(donkey.getSupplytime());
-        updateSpinner(breedSpinner, donkey.getBreed());
-        updateSpinner(sexSpinner, donkey.getSex());
+        breedSpinner.setSelection(donkey.getBreed() - 1);
+        sexSpinner.setSelection(donkey.getSex() - 1);
+        //updateSpinner(breedSpinner, donkey.getBreed());
+        //updateSpinner(sexSpinner, donkey.getSex());
         if(donkey.getAgewhenkill() != null && donkey.getAgewhenkill().length() >= 2)
             ageWhenKillEditText.setText(donkey.getAgewhenkill().substring(0,donkey.getAgewhenkill().length()-1 ));
 

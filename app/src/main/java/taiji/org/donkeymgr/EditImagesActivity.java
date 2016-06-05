@@ -107,7 +107,7 @@ public class EditImagesActivity extends ToolBarActivity {
                     @Override
                     public void onError(Call call, Exception e) {
                         p_dialog.cancel();
-                        SettingUtils.setIsOnline(false);
+                        //SettingUtils.setIsLogin(false);
                         Toast.makeText(EditImagesActivity.this, "下载过程发生错误 " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         EditImagesActivity.this.finish();
                     }

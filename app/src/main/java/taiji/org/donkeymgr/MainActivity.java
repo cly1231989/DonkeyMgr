@@ -46,7 +46,6 @@ import taiji.org.donkeymgr.bean.OperaResult;
 import taiji.org.donkeymgr.bean.UserInfo;
 import taiji.org.donkeymgr.dao.Donkey;
 import taiji.org.donkeymgr.dao.DonkeyDao;
-import taiji.org.donkeymgr.dao.UploadImageInfoDao;
 import taiji.org.donkeymgr.msgs.BeginSyncMessageEvent;
 import taiji.org.donkeymgr.msgs.EndSyncMessageEvent;
 import taiji.org.donkeymgr.msgs.LoginResultMsgEvent;
@@ -97,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!SettingUtils.isOnline())
+                if (!SettingUtils.isLogin())
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 else
                     startActivity(new Intent(MainActivity.this, ModifyPwdActivity.class));
@@ -241,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onError(Call call, Exception e) {
                     p_dialog.cancel();
-                    SettingUtils.setIsOnline(false);
+                    SettingUtils.setIsLogin(false);
                     toolbar.setNavigationIcon(R.drawable.head_image_unlogin);
                     Toast.makeText(MainActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -332,10 +331,10 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoginResultMsgEvent(LoginResultMsgEvent event){
         if( !event.isSuccess() ){
-            SettingUtils.setIsOnline(false);
+            SettingUtils.setIsLogin(false);
             toolbar.setNavigationIcon(R.drawable.head_image_unlogin);
         } else {
-            SettingUtils.setIsOnline(true);
+            SettingUtils.setIsLogin(true);
             toolbar.setNavigationIcon(R.drawable.head_image_login);
             Toast.makeText(MainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
             UploadImageThread.getInstance().start();
@@ -449,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if (NetworkUtils.downloadIdList(MainActivity.this, donkeyDao)) {
                         if (NetworkUtils.downloadDonkeys(MainActivity.this, donkeyDao)) {
-                            if(SettingUtils.isOnline())
+                            if(SettingUtils.isLogin())
                                 NetworkUtils.uploadDonkeys(MainActivity.this, donkeyDao);
                         }
                     }

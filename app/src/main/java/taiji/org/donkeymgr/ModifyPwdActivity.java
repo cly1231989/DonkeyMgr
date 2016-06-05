@@ -1,7 +1,6 @@
 package taiji.org.donkeymgr;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -120,7 +119,7 @@ public class ModifyPwdActivity extends ToolBarActivity {
                             }
                         });
 
-                SettingUtils.setIsOnline(false);
+                SettingUtils.setIsLogin(false);
                 SettingUtils.clearUserInfo(ModifyPwdActivity.this);
                 EventBus.getDefault().post(new LogoutMsgEvent());
                 ModifyPwdActivity.this.finish();

@@ -31,8 +31,8 @@ public class DonkeyDao extends AbstractDao<Donkey, Long> {
         public final static Property Supplyaddress = new Property(5, String.class, "supplyaddress", false, "SUPPLYADDRESS");
         public final static Property Dealtime = new Property(6, String.class, "dealtime", false, "DEALTIME");
         public final static Property Supplytime = new Property(7, String.class, "supplytime", false, "SUPPLYTIME");
-        public final static Property Breed = new Property(8, String.class, "breed", false, "BREED");
-        public final static Property Sex = new Property(9, String.class, "sex", false, "SEX");
+        public final static Property Breed = new Property(8, Integer.class, "breed", false, "BREED");
+        public final static Property Sex = new Property(9, Integer.class, "sex", false, "SEX");
         public final static Property Agewhendeal = new Property(10, String.class, "agewhendeal", false, "AGEWHENDEAL");
         public final static Property Agewhenkill = new Property(11, String.class, "agewhenkill", false, "AGEWHENKILL");
         public final static Property Feedpattern = new Property(12, String.class, "feedpattern", false, "FEEDPATTERN");
@@ -53,11 +53,12 @@ public class DonkeyDao extends AbstractDao<Donkey, Long> {
         public final static Property Furquality = new Property(27, String.class, "furquality", false, "FURQUALITY");
         public final static Property Reserved = new Property(28, String.class, "reserved", false, "RESERVED");
         public final static Property Factorytime = new Property(29, String.class, "factorytime", false, "FACTORYTIME");
-        public final static Property Version = new Property(30, Long.class, "version", false, "VERSION");
-        public final static Property Syncver = new Property(31, Long.class, "syncver", false, "SYNCVER");
-        public final static Property Idonserver = new Property(32, Long.class, "idonserver", false, "IDONSERVER");
-        public final static Property Syncing = new Property(33, Boolean.class, "syncing", false, "SYNCING");
-        public final static Property Deleteflag = new Property(34, Boolean.class, "deleteflag", false, "DELETEFLAG");
+        public final static Property Stockstatus = new Property(30, Integer.class, "stockstatus", false, "STOCKSTATUS");
+        public final static Property Version = new Property(31, Long.class, "version", false, "VERSION");
+        public final static Property Syncver = new Property(32, Long.class, "syncver", false, "SYNCVER");
+        public final static Property Idonserver = new Property(33, Long.class, "idonserver", false, "IDONSERVER");
+        public final static Property Syncing = new Property(34, Boolean.class, "syncing", false, "SYNCING");
+        public final static Property Deleteflag = new Property(35, Boolean.class, "deleteflag", false, "DELETEFLAG");
     };
 
 
@@ -81,8 +82,8 @@ public class DonkeyDao extends AbstractDao<Donkey, Long> {
                 "\"SUPPLYADDRESS\" TEXT," + // 5: supplyaddress
                 "\"DEALTIME\" TEXT," + // 6: dealtime
                 "\"SUPPLYTIME\" TEXT," + // 7: supplytime
-                "\"BREED\" TEXT," + // 8: breed
-                "\"SEX\" TEXT," + // 9: sex
+                "\"BREED\" INTEGER," + // 8: breed
+                "\"SEX\" INTEGER," + // 9: sex
                 "\"AGEWHENDEAL\" TEXT," + // 10: agewhendeal
                 "\"AGEWHENKILL\" TEXT," + // 11: agewhenkill
                 "\"FEEDPATTERN\" TEXT," + // 12: feedpattern
@@ -103,11 +104,12 @@ public class DonkeyDao extends AbstractDao<Donkey, Long> {
                 "\"FURQUALITY\" TEXT," + // 27: furquality
                 "\"RESERVED\" TEXT," + // 28: reserved
                 "\"FACTORYTIME\" TEXT," + // 29: factorytime
-                "\"VERSION\" INTEGER," + // 30: version
-                "\"SYNCVER\" INTEGER," + // 31: syncver
-                "\"IDONSERVER\" INTEGER," + // 32: idonserver
-                "\"SYNCING\" INTEGER," + // 33: syncing
-                "\"DELETEFLAG\" INTEGER);"); // 34: deleteflag
+                "\"STOCKSTATUS\" INTEGER," + // 30: stockstatus
+                "\"VERSION\" INTEGER," + // 31: version
+                "\"SYNCVER\" INTEGER," + // 32: syncver
+                "\"IDONSERVER\" INTEGER," + // 33: idonserver
+                "\"SYNCING\" INTEGER," + // 34: syncing
+                "\"DELETEFLAG\" INTEGER);"); // 35: deleteflag
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_DONKEY_SN ON DONKEY" +
                 " (\"SN\");");
@@ -160,14 +162,14 @@ public class DonkeyDao extends AbstractDao<Donkey, Long> {
             stmt.bindString(8, supplytime);
         }
  
-        String breed = entity.getBreed();
+        Integer breed = entity.getBreed();
         if (breed != null) {
-            stmt.bindString(9, breed);
+            stmt.bindLong(9, breed);
         }
  
-        String sex = entity.getSex();
+        Integer sex = entity.getSex();
         if (sex != null) {
-            stmt.bindString(10, sex);
+            stmt.bindLong(10, sex);
         }
  
         String agewhendeal = entity.getAgewhendeal();
@@ -270,29 +272,34 @@ public class DonkeyDao extends AbstractDao<Donkey, Long> {
             stmt.bindString(30, factorytime);
         }
  
+        Integer stockstatus = entity.getStockstatus();
+        if (stockstatus != null) {
+            stmt.bindLong(31, stockstatus);
+        }
+ 
         Long version = entity.getVersion();
         if (version != null) {
-            stmt.bindLong(31, version);
+            stmt.bindLong(32, version);
         }
  
         Long syncver = entity.getSyncver();
         if (syncver != null) {
-            stmt.bindLong(32, syncver);
+            stmt.bindLong(33, syncver);
         }
  
         Long idonserver = entity.getIdonserver();
         if (idonserver != null) {
-            stmt.bindLong(33, idonserver);
+            stmt.bindLong(34, idonserver);
         }
  
         Boolean syncing = entity.getSyncing();
         if (syncing != null) {
-            stmt.bindLong(34, syncing ? 1L: 0L);
+            stmt.bindLong(35, syncing ? 1L: 0L);
         }
  
         Boolean deleteflag = entity.getDeleteflag();
         if (deleteflag != null) {
-            stmt.bindLong(35, deleteflag ? 1L: 0L);
+            stmt.bindLong(36, deleteflag ? 1L: 0L);
         }
     }
 
@@ -314,8 +321,8 @@ public class DonkeyDao extends AbstractDao<Donkey, Long> {
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // supplyaddress
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // dealtime
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // supplytime
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // breed
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // sex
+            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // breed
+            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // sex
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // agewhendeal
             cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // agewhenkill
             cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // feedpattern
@@ -336,11 +343,12 @@ public class DonkeyDao extends AbstractDao<Donkey, Long> {
             cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27), // furquality
             cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28), // reserved
             cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29), // factorytime
-            cursor.isNull(offset + 30) ? null : cursor.getLong(offset + 30), // version
-            cursor.isNull(offset + 31) ? null : cursor.getLong(offset + 31), // syncver
-            cursor.isNull(offset + 32) ? null : cursor.getLong(offset + 32), // idonserver
-            cursor.isNull(offset + 33) ? null : cursor.getShort(offset + 33) != 0, // syncing
-            cursor.isNull(offset + 34) ? null : cursor.getShort(offset + 34) != 0 // deleteflag
+            cursor.isNull(offset + 30) ? null : cursor.getInt(offset + 30), // stockstatus
+            cursor.isNull(offset + 31) ? null : cursor.getLong(offset + 31), // version
+            cursor.isNull(offset + 32) ? null : cursor.getLong(offset + 32), // syncver
+            cursor.isNull(offset + 33) ? null : cursor.getLong(offset + 33), // idonserver
+            cursor.isNull(offset + 34) ? null : cursor.getShort(offset + 34) != 0, // syncing
+            cursor.isNull(offset + 35) ? null : cursor.getShort(offset + 35) != 0 // deleteflag
         );
         return entity;
     }
@@ -356,8 +364,8 @@ public class DonkeyDao extends AbstractDao<Donkey, Long> {
         entity.setSupplyaddress(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setDealtime(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setSupplytime(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setBreed(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setSex(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setBreed(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
+        entity.setSex(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
         entity.setAgewhendeal(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
         entity.setAgewhenkill(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
         entity.setFeedpattern(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
@@ -378,11 +386,12 @@ public class DonkeyDao extends AbstractDao<Donkey, Long> {
         entity.setFurquality(cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27));
         entity.setReserved(cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28));
         entity.setFactorytime(cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29));
-        entity.setVersion(cursor.isNull(offset + 30) ? null : cursor.getLong(offset + 30));
-        entity.setSyncver(cursor.isNull(offset + 31) ? null : cursor.getLong(offset + 31));
-        entity.setIdonserver(cursor.isNull(offset + 32) ? null : cursor.getLong(offset + 32));
-        entity.setSyncing(cursor.isNull(offset + 33) ? null : cursor.getShort(offset + 33) != 0);
-        entity.setDeleteflag(cursor.isNull(offset + 34) ? null : cursor.getShort(offset + 34) != 0);
+        entity.setStockstatus(cursor.isNull(offset + 30) ? null : cursor.getInt(offset + 30));
+        entity.setVersion(cursor.isNull(offset + 31) ? null : cursor.getLong(offset + 31));
+        entity.setSyncver(cursor.isNull(offset + 32) ? null : cursor.getLong(offset + 32));
+        entity.setIdonserver(cursor.isNull(offset + 33) ? null : cursor.getLong(offset + 33));
+        entity.setSyncing(cursor.isNull(offset + 34) ? null : cursor.getShort(offset + 34) != 0);
+        entity.setDeleteflag(cursor.isNull(offset + 35) ? null : cursor.getShort(offset + 35) != 0);
      }
     
     /** @inheritdoc */

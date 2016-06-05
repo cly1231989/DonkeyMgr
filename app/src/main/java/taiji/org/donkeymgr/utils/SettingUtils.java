@@ -11,14 +11,14 @@ import taiji.org.donkeymgr.bean.UserInfo;
  * Created by hose on 2016/4/3.
  */
 public class SettingUtils {
-    private static boolean isOnline = false;
+    private static boolean isLogin = false;
 
-    public static boolean isOnline() {
-        return isOnline;
+    public static boolean isLogin() {
+        return isLogin;
     }
 
-    public static void setIsOnline(boolean isOnline) {
-        SettingUtils.isOnline = isOnline;
+    public static void setIsLogin(boolean isLogin) {
+        SettingUtils.isLogin = isLogin;
     }
 
     public static void setAutoync(Context context, boolean autoync){
@@ -40,7 +40,7 @@ public class SettingUtils {
         localEditor.commit();
     }
 
-    public static boolean getWifiSync(Context context){
+    public static boolean isOnlySyncByWifi(Context context){
         SharedPreferences settings = context.getSharedPreferences("setting.data", 0);
         return settings.getBoolean("wifisync", true);
     }
@@ -88,7 +88,7 @@ public class SettingUtils {
         if( cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED )
             return true;
         else
-            return true;
+            return false;
 //        }
     }
 
@@ -118,8 +118,8 @@ public class SettingUtils {
 //        }
     }
 
-    public static boolean canSync(Context context){
-        if ( getWifiSync(context) )
+    public static boolean isOnline(Context context){
+        if ( isOnlySyncByWifi(context) )
             return  isWifiConnected(context);
 
         return isWifiConnected(context) || isMobileConnected(context);
@@ -129,7 +129,7 @@ public class SettingUtils {
         if ( !getAutoSync(context) )
             return false;
 
-        return canSync(context);
+        return isOnline(context);
     }
 
     public static void saveServerAddress(Context context, String serverAddress){
