@@ -113,7 +113,7 @@ public class NetworkUtils {
                         .post()
                         .addFile("image", "", image)
                         .url( uploadImageInfo.getUrl() )
-                        .addParams( "donkeyid", Long.toString( uploadImageInfo.getIdonserver() ))
+                        .addParams( "donkeyid", Long.toString( donkey.getIdonserver() ))
                         .tag(context)
                         .build()
                         .execute();

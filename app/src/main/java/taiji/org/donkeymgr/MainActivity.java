@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                     UploadImageThread.getInstance().startSync();
                 };
             }
-        }, 5000, 30 * 1000) ;
+        }, 5000, 120 * 1000) ;
     }
 
     private void startAnimation(){

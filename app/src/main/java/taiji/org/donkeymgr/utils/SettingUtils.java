@@ -141,7 +141,7 @@ public class SettingUtils {
 
     public static String getServerAddress(Context context){
         SharedPreferences settings = context.getSharedPreferences("setting.data", 0);
-        return settings.getString("server", "192.168.1.108:8080");
+        return settings.getString("server", "124.67.254.158:8088");
     }
 
     public static String makeServerAddress(Context context, String para){
