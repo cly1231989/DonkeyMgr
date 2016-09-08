@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cn.finalteam.galleryfinal.GalleryFinal;
@@ -30,7 +31,7 @@ import taiji.org.donkeymgr.utils.SettingUtils;
 
 public class MyAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<String> stringArrayList;
+    private ArrayList<Integer> snList;
     private Context context;
 
     private int selectedItemNum;
@@ -38,7 +39,7 @@ public class MyAdapter extends RecyclerView.Adapter {
 
     public MyAdapter(Context context) {
         this.context = context;
-        stringArrayList = new ArrayList<>();
+        snList = new ArrayList<>();
         donkeyDao = DaoUtils.getDonkeyDao();
 
         //getDatas(0, GlobalData.COUNT_PER_PAGE);
@@ -87,16 +88,15 @@ public class MyAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final MyHolder myHolder = (MyHolder) RecyclerViewDragHolder.getHolder(holder);
 
-        if ( position >= stringArrayList.size() ){
+        if ( position >= snList.size() ){
             myHolder.donkeynum.setText("");
             myHolder.notsync.setVisibility(View.INVISIBLE);
         }
         else {
-            String data = stringArrayList.get(position);
-            myHolder.donkeynum.setText(data);
+            int sn = snList.get(position);
+            myHolder.donkeynum.setText( String.valueOf(sn) );
 
-            int num = Integer.parseInt(data);
-            Donkey donkey = DaoUtils.getDonkeyBySn(donkeyDao, num);
+            Donkey donkey = DaoUtils.getDonkeyBySn(donkeyDao, sn);
             if( donkey.hasSync() )
                 myHolder.notsync.setVisibility(View.GONE);
             else
@@ -111,7 +111,7 @@ public class MyAdapter extends RecyclerView.Adapter {
                     }
 
                     Intent intent = new Intent(context, EditActivity.class);
-                    intent.putExtra("num", stringArrayList.get(position));
+                    intent.putExtra("num", snList.get(position));
 
                     context.startActivity(intent);
                 }
@@ -145,13 +145,13 @@ public class MyAdapter extends RecyclerView.Adapter {
                     builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            selectedItemNum = Integer.parseInt(stringArrayList.get(position));
+                            selectedItemNum = snList.get(position);
                             Donkey donkey = DaoUtils.getDonkeyBySn(donkeyDao, selectedItemNum);
                             donkey.setDeleteflag(true);
                             donkeyDao.update(donkey);
                             DaoUtils.deleteUploadImageInfo(context.getApplicationContext(), donkey.getId());
 
-                            stringArrayList.remove(position);
+                            snList.remove(position);
                             notifyItemRemoved(position);
                             notifyItemRangeChanged(position, getItemCount());
                             dialog.dismiss();
@@ -169,7 +169,7 @@ public class MyAdapter extends RecyclerView.Adapter {
             myHolder.uploadImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    selectedItemNum = Integer.parseInt(stringArrayList.get(position));
+                    selectedItemNum = snList.get(position);
 
                     if (!SettingUtils.isOnline(context) || !SettingUtils.isLogin()) {
                         AddImageUtils addImageUtils = new AddImageUtils(context, ((MainActivity) context).getSupportFragmentManager(), selectedItemNum, donkeyDao, mOnHanlderResultCallback);
@@ -214,7 +214,7 @@ public class MyAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return stringArrayList.size();
+        return snList.size();
     }
 
     public long getTotalCount(){
@@ -228,42 +228,46 @@ public class MyAdapter extends RecyclerView.Adapter {
 
         List<Donkey> donkeys = donkeyDao.queryBuilder().where(DonkeyDao.Properties.Deleteflag.notEq(true)).offset(beginIndex).limit(count).list();
         for (Donkey donkey: donkeys) {
-            stringArrayList.add(Integer.toString(donkey.getSn()));
+            snList.add( donkey.getSn() );
         }
 
+        Collections.sort(snList, Collections.reverseOrder());
         notifyDataSetChanged();
         return donkeys.size();
     }
 
-    public void addItem(String sn){
-        stringArrayList.add(sn);
+    public void addItem(int sn){
+        snList.add(sn);
+        Collections.sort(snList, Collections.reverseOrder());
         notifyDataSetChanged();
     }
 
     public void delItem(String sn){
-        stringArrayList.remove(sn);
+        snList.remove(sn);
     }
 
     public void search(int searchNum){
-        stringArrayList.clear();
+        snList.clear();
         Donkey donkey = DaoUtils.getDonkeyBySn(donkeyDao, searchNum);
         if (donkey != null )
-            stringArrayList.add(Integer.toString(donkey.getSn()));
+            snList.add( donkey.getSn() );
 
+        Collections.sort(snList, Collections.reverseOrder());
         notifyDataSetChanged();
     }
 
     public void search(String farmer){
-        stringArrayList.clear();
+        snList.clear();
         List<Donkey>  donkeys = DaoUtils.getDonkeyByFarmer(donkeyDao, farmer);
         for (Donkey donkey:donkeys) {
-            stringArrayList.add(Integer.toString(donkey.getSn()));
+            snList.add( donkey.getSn() );
         }
 
+        Collections.sort(snList, Collections.reverseOrder());
         notifyDataSetChanged();
     }
 
     public void clear(){
-        stringArrayList.clear();
+        snList.clear();
     }
 }

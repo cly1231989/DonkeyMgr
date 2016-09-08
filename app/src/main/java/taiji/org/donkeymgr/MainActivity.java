@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addItem(int num) {
         if (mDataAdapter.getItemCount() < GlobalData.COUNT_PER_PAGE) {
-            mDataAdapter.addItem(Integer.toString(num));
+            mDataAdapter.addItem( num );
             lastIndex++;
         }
     }
